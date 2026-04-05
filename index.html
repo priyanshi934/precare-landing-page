@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precare — Women's Health, Personalised</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --rose: #C2637A; --rose-lt: #F5E6EB; --rose-dk: #8A3A50;
+  --mauve: #7B5EA7; --mauve-lt: #EDE8F5;
+  --sage: #6B8F71; --sage-lt: #E7F0E8;
+  --gold: #C4923A; --gold-lt: #FBF0DC;
+  --cream: #FBF7F2; --ink: #1E1618; --ink-muted: #6B5860;
+  --border: rgba(194,99,122,0.15);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 4rem;
+  background: rgba(251,247,242,0.88); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Cormorant Garant', serif; font-size: 1.75rem; font-weight: 600; color: var(--rose-dk); letter-spacing: -0.02em; }
+.nav-logo span { color: var(--mauve); font-style: italic; }
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a { font-size: 0.85rem; font-weight: 400; letter-spacing: 0.04em; text-decoration: none; color: var(--ink-muted); text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--rose); }
+.nav-cta { background: var(--rose); color: white; border: none; border-radius: 2rem; padding: 0.65rem 1.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+.nav-cta:hover { background: var(--rose-dk); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 8rem 4rem 6rem; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 75% 50%, rgba(194,99,122,0.09) 0%, transparent 65%),
+              radial-gradient(ellipse 40% 50% at 15% 85%, rgba(123,94,167,0.07) 0%, transparent 55%),
+              radial-gradient(ellipse 35% 35% at 90% 10%, rgba(196,146,58,0.06) 0%, transparent 50%);
+}
+.hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.hero-orb-1 { width: 480px; height: 480px; right: -60px; top: 50%; transform: translateY(-50%); background: radial-gradient(circle, rgba(194,99,122,0.1) 0%, rgba(123,94,167,0.06) 55%, transparent 75%); animation: floatA 9s ease-in-out infinite; }
+.hero-orb-2 { width: 260px; height: 260px; right: 240px; top: 8%; background: radial-gradient(circle, rgba(196,146,58,0.09) 0%, transparent 70%); animation: floatB 11s ease-in-out infinite; }
+.hero-orb-3 { width: 180px; height: 180px; left: 8%; bottom: 12%; background: radial-gradient(circle, rgba(107,143,113,0.09) 0%, transparent 70%); animation: floatB 13s ease-in-out infinite; }
+@keyframes floatA { 0%,100% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(calc(-50% - 22px)) scale(1.03); } }
+@keyframes floatB { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-16px) scale(1.04); } }
+
+.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; width: 100%; }
+.hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--gold-lt); border: 1px solid rgba(196,146,58,0.25); border-radius: 2rem; padding: 0.4rem 1rem; font-size: 0.78rem; font-weight: 500; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2rem; animation: fadeUp 0.8s ease both; }
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
+.hero h1 { font-family: 'Cormorant Garant', serif; font-size: clamp(3rem, 5vw, 5.2rem); font-weight: 300; line-height: 1.06; letter-spacing: -0.02em; animation: fadeUp 0.8s 0.1s ease both; }
+.hero h1 em { font-style: italic; color: var(--rose); }
+.hero h1 strong { font-weight: 600; }
+.hero-sub { margin-top: 1.75rem; font-size: 1.05rem; font-weight: 300; line-height: 1.85; color: var(--ink-muted); animation: fadeUp 0.8s 0.2s ease both; }
+.hero-actions { display: flex; align-items: center; gap: 1.25rem; margin-top: 2.5rem; animation: fadeUp 0.8s 0.3s ease both; }
+.btn-primary { background: var(--ink); color: white; padding: 1rem 2.5rem; border-radius: 3rem; font-size: 0.95rem; font-weight: 500; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; text-decoration: none; display: inline-block; }
+.btn-primary:hover { background: var(--rose-dk); transform: translateY(-2px); }
+.btn-ghost { color: var(--ink); font-size: 0.9rem; font-weight: 400; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+.btn-ghost:hover { color: var(--rose); }
+.btn-ghost::after { content: '→'; transition: transform 0.2s; }
+.btn-ghost:hover::after { transform: translateX(4px); }
+.hero-stats { display: flex; gap: 3rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); animation: fadeUp 0.8s 0.4s ease both; }
+.stat-num { font-family: 'Cormorant Garant', serif; font-size: 2.2rem; font-weight: 600; color: var(--rose); }
+.stat-label { font-size: 0.8rem; color: var(--ink-muted); margin-top: 0.1rem; line-height: 1.4; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+/* HERO DASHBOARD PREVIEW */
+.hero-visual { animation: fadeUp 0.9s 0.35s ease both; }
+.dashboard-preview-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 1.75rem; overflow: hidden;
+  box-shadow: 0 32px 80px rgba(194,99,122,0.1), 0 8px 24px rgba(0,0,0,0.04);
+}
+.dp-header {
+  background: linear-gradient(140deg, #2D1F28 0%, #1E1A30 100%);
+  padding: 1.5rem;
+}
+.dp-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.dp-label { font-size: 0.6rem; font-weight: 500; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; }
+.dp-tabs { display: flex; gap: 0.4rem; }
+.dp-tab { padding: 0.25rem 0.65rem; border-radius: 1rem; font-size: 0.62rem; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.35); cursor: pointer; transition: all 0.2s; background: none; font-family: 'DM Sans', sans-serif; }
+.dp-tab.active { background: rgba(194,99,122,0.25); border-color: rgba(194,99,122,0.4); color: var(--rose-lt); }
+.dp-user-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.dp-greeting { color: rgba(255,255,255,0.45); font-size: 0.65rem; }
+.dp-name { color: white; font-size: 0.95rem; font-weight: 500; margin-top: 0.15rem; }
+.dp-week-badge { background: rgba(123,94,167,0.3); border: 1px solid rgba(123,94,167,0.4); border-radius: 1rem; padding: 0.2rem 0.65rem; color: rgba(196,168,240,0.9); font-size: 0.62rem; }
+.dp-body { padding: 1.25rem 1.5rem; }
+.dp-personalised-banner {
+  background: linear-gradient(90deg, var(--rose-lt) 0%, var(--mauve-lt) 100%);
+  border-radius: 0.75rem; padding: 0.75rem 1rem; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.dp-banner-icon { font-size: 1rem; }
+.dp-banner-text { font-size: 0.72rem; font-weight: 500; color: var(--rose-dk); }
+.dp-banner-sub { font-size: 0.62rem; color: var(--ink-muted); font-weight: 300; }
+.dp-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+.dp-card { flex: 1; background: var(--cream); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.75rem; }
+.dp-card-label { font-size: 0.58rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+.dp-card-val { font-family: 'Cormorant Garant', serif; font-size: 1.1rem; font-weight: 600; color: var(--rose-dk); }
+.dp-card-sub { font-size: 0.58rem; color: var(--ink-muted); margin-top: 0.15rem; }
+.dp-features-label { font-size: 0.6rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+.dp-feat-row { display: flex; gap: 0.5rem; }
+.dp-feat { flex: 1; background: white; border: 1px solid var(--border); border-radius: 0.65rem; padding: 0.6rem 0.4rem; text-align: center; }
+.dp-feat.first { background: var(--rose-lt); border-color: rgba(194,99,122,0.2); }
+.dp-feat-icon { font-size: 1.1rem; margin-bottom: 0.2rem; }
+.dp-feat-lbl { font-size: 0.52rem; font-weight: 500; color: var(--ink); line-height: 1.3; }
+
+/* SECTIONS */
+.section { padding: 7rem 4rem; }
+.section-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose); margin-bottom: 1rem; }
+.section-title { font-family: 'Cormorant Garant', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.15; letter-spacing: -0.02em; }
+.section-title em { font-style: italic; color: var(--rose); }
+
+/* PROBLEM */
+.problem-section { background: var(--ink); color: white; }
+.problem-section .section-label { color: var(--gold); }
+.problem-section .section-title { color: white; }
+.problem-section .section-title em { color: var(--rose-lt); }
+.problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 4rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 1.5rem; overflow: hidden; }
+.problem-item { padding: 2.5rem; background: rgba(255,255,255,0.03); border-right: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.3s; }
+.problem-item:hover { background: rgba(194,99,122,0.08); }
+.problem-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); font-size: 1.3rem; margin-bottom: 1rem; }
+.problem-item h3 { font-size: 1rem; font-weight: 500; color: white; margin-bottom: 0.5rem; }
+.problem-item p { font-size: 0.875rem; font-weight: 300; line-height: 1.7; color: rgba(255,255,255,0.5); }
+
+/* DASHBOARD PHONE SECTION */
+.dash-section { background: var(--cream); }
+.dash-section-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.dash-text p { font-size: 1.05rem; font-weight: 300; line-height: 1.9; color: var(--ink-muted); margin-top: 1.5rem; }
+.dash-bullets { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.dash-bullet { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; font-weight: 300; color: var(--ink-muted); line-height: 1.6; }
+.dash-bullet-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rose); flex-shrink: 0; margin-top: 0.45rem; }
+
+/* PHONE MOCKUP */
+.phone-wrap { display: flex; justify-content: center; position: relative; }
+.phone-frame { width: 270px; background: #12101A; border-radius: 3rem; padding: 1rem 0.85rem; box-shadow: 0 48px 100px rgba(30,22,24,0.25), 0 0 0 1px rgba(255,255,255,0.06); position: relative; }
+.phone-notch { width: 72px; height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; margin: 0 auto 0.9rem; }
+.phone-screen { background: linear-gradient(160deg, #2D1F28 0%, #1A1A2E 100%); border-radius: 2.2rem; overflow: hidden; }
+
+/* PHONE 1 — PREGNANCY DASHBOARD */
+.ph1-top { padding: 1.1rem 1.1rem 0.5rem; }
+.ph1-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; }
+.ph1-greet { color: rgba(255,255,255,0.4); font-size: 0.6rem; }
+.ph1-name { color: white; font-size: 0.82rem; font-weight: 500; margin-top: 0.1rem; }
+.ph1-week { background: rgba(194,99,122,0.22); border: 1px solid rgba(194,99,122,0.3); border-radius: 1rem; padding: 0.18rem 0.55rem; color: var(--rose-lt); font-size: 0.58rem; }
+.ph1-baby-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07); border-radius: 1rem; padding: 0.85rem; margin-bottom: 0.75rem; }
+.ph1-baby-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.ph1-baby-label { font-size: 0.55rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.06em; }
+.ph1-due { font-size: 0.58rem; color: rgba(255,255,255,0.4); }
+.ph1-due strong { color: rgba(255,255,255,0.8); }
+.ph1-fruit-row { display: flex; align-items: center; gap: 0.75rem; }
+.ph1-baby-emoji { font-size: 2.2rem; }
+.ph1-compare { flex: 1; }
+.ph1-compare-label { font-size: 0.5rem; color: rgba(255,255,255,0.35); margin-bottom: 0.2rem; }
+.ph1-fruit-emoji { font-size: 1.3rem; }
+.ph1-fruit-name { font-size: 0.6rem; color: rgba(255,255,255,0.7); font-weight: 500; margin-top: 0.1rem; }
+.ph1-fruit-size { font-size: 0.52rem; color: rgba(255,255,255,0.35); }
+.ph1-thought { background: rgba(255,255,255,0.04); border-left: 2px solid rgba(194,99,122,0.4); padding: 0.5rem 0.65rem; margin: 0 1.1rem 0.75rem; font-size: 0.55rem; color: rgba(255,255,255,0.45); font-style: italic; line-height: 1.5; }
+.ph1-feat-label { padding: 0 1.1rem 0.35rem; font-size: 0.52rem; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.06em; }
+.ph1-feats { display: flex; gap: 0.4rem; padding: 0 1.1rem 1rem; overflow-x: auto; }
+.ph1-feats::-webkit-scrollbar { display: none; }
+.ph1-feat { flex-shrink: 0; width: 56px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07); border-radius: 0.65rem; padding: 0.5rem 0.3rem; text-align: center; }
+.ph1-feat.hl { background: rgba(194,99,122,0.15); border-color: rgba(194,99,122,0.25); }
+.ph1-feat-icon { font-size: 0.95rem; margin-bottom: 0.2rem; }
+.ph1-feat-lbl { font-size: 0.48rem; color: rgba(255,255,255,0.5); line-height: 1.3; }
+
+/* PHONE 2 — PCOS QUESTIONNAIRE */
+.ph2-screen { background: linear-gradient(160deg, #1A1A2E 0%, #2D1F28 100%); border-radius: 2.2rem; overflow: hidden; }
+.ph2-header { padding: 1rem 1.1rem 0.5rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.ph2-back { font-size: 0.7rem; color: rgba(255,255,255,0.3); }
+.ph2-title { font-size: 0.7rem; font-weight: 500; color: white; }
+.ph2-badge { margin-left: auto; background: rgba(123,94,167,0.25); border: 1px solid rgba(123,94,167,0.3); border-radius: 1rem; padding: 0.15rem 0.5rem; font-size: 0.5rem; color: rgba(180,160,220,0.9); }
+.ph2-progress { height: 3px; background: rgba(255,255,255,0.06); margin: 0 1.1rem 0.75rem; border-radius: 2px; }
+.ph2-progress-fill { height: 100%; width: 70%; background: linear-gradient(90deg, var(--rose), var(--mauve)); border-radius: 2px; }
+.ph2-q { padding: 0 1.1rem; margin-bottom: 0.6rem; }
+.ph2-q-text { font-size: 0.6rem; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem; line-height: 1.4; }
+.ph2-opts { display: flex; flex-direction: column; gap: 0.3rem; }
+.ph2-opt { padding: 0.35rem 0.65rem; border-radius: 0.5rem; font-size: 0.55rem; border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+.ph2-opt.sel { background: rgba(194,99,122,0.18); border-color: rgba(194,99,122,0.35); color: var(--rose-lt); }
+.ph2-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 0.6rem 1.1rem; }
+.ph2-result { margin: 0 1.1rem 0.5rem; background: rgba(194,99,122,0.1); border: 1px solid rgba(194,99,122,0.2); border-radius: 0.75rem; padding: 0.75rem; }
+.ph2-result-top { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.ph2-risk-dot { width: 8px; height: 8px; border-radius: 50%; background: #E8A04A; flex-shrink: 0; }
+.ph2-risk-label { font-size: 0.58rem; font-weight: 500; color: rgba(255,255,255,0.8); }
+.ph2-risk-level { margin-left: auto; font-size: 0.5rem; background: rgba(232,160,74,0.2); border: 1px solid rgba(232,160,74,0.3); border-radius: 0.35rem; padding: 0.1rem 0.4rem; color: #E8C07A; }
+.ph2-recs-title { font-size: 0.52rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
+.ph2-rec { display: flex; align-items: flex-start; gap: 0.35rem; margin-bottom: 0.25rem; }
+.ph2-rec-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--sage); margin-top: 0.25rem; flex-shrink: 0; }
+.ph2-rec-text { font-size: 0.52rem; color: rgba(255,255,255,0.5); line-height: 1.4; }
+.ph2-evb { display: flex; gap: 0.25rem; flex-wrap: wrap; padding: 0 1.1rem 0.9rem; margin-top: 0.4rem; }
+.ph2-evb-chip { padding: 0.15rem 0.4rem; border-radius: 0.35rem; font-size: 0.48rem; }
+.ph2-evb-type { background: rgba(123,94,167,0.2); border: 1px solid rgba(123,94,167,0.3); color: rgba(180,160,220,0.9); }
+.ph2-evb-q { background: rgba(196,146,58,0.15); border: 1px solid rgba(196,146,58,0.25); color: rgba(210,170,80,0.9); }
+.ph2-evb-s { background: rgba(107,143,113,0.15); border: 1px solid rgba(107,143,113,0.25); color: rgba(140,190,148,0.9); }
+
+/* FLOAT BADGES */
+.float-badge { position: absolute; background: white; border-radius: 1rem; padding: 0.6rem 0.9rem; box-shadow: 0 12px 30px rgba(194,99,122,0.14); white-space: nowrap; }
+.fb-right { right: -28px; top: 28%; }
+.fb-left { left: -28px; bottom: 28%; }
+.fb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.fb-dot-green { background: var(--sage); }
+.fb-dot-mauve { background: var(--mauve); }
+.fb-inner { display: flex; align-items: center; gap: 0.5rem; }
+.fb-text { font-size: 0.68rem; font-weight: 500; color: var(--ink); }
+.fb-sub { font-size: 0.58rem; color: var(--ink-muted); font-weight: 300; margin-top: 0.05rem; }
+
+/* FEATURES */
+.features-section { background: white; }
+.features-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
+.features-intro p { font-size: 1.05rem; font-weight: 300; line-height: 1.9; color: var(--ink-muted); padding-top: 1rem; }
+.features-tabs { display: flex; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+.tab-btn { padding: 0.6rem 1.4rem; border-radius: 2rem; border: 1px solid var(--border); background: var(--cream); color: var(--ink-muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 400; cursor: pointer; transition: all 0.2s; }
+.tab-btn.active, .tab-btn:hover { background: var(--rose); color: white; border-color: var(--rose); }
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.feature-card { background: var(--cream); border: 1px solid var(--border); border-radius: 1.25rem; padding: 2rem; transition: transform 0.2s, box-shadow 0.2s; }
+.feature-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(194,99,122,0.1); }
+.feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.25rem; }
+.icon-rose { background: var(--rose-lt); } .icon-mauve { background: var(--mauve-lt); }
+.icon-sage { background: var(--sage-lt); } .icon-gold { background: var(--gold-lt); }
+.feature-card h3 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.4rem; }
+.feature-card p { font-size: 0.82rem; font-weight: 300; line-height: 1.7; color: var(--ink-muted); }
+
+/* COMPANION (EVIDENCE) SECTION */
+.companion-section { background: linear-gradient(135deg, #1E1618 0%, #2D1F28 50%, #1A1A2E 100%); color: white; position: relative; overflow: hidden; }
+.companion-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 85% 50%, rgba(123,94,167,0.18) 0%, transparent 60%); }
+.companion-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; position: relative; z-index: 1; }
+.companion-content .section-label { color: rgba(196,146,58,0.8); }
+.companion-content .section-title { color: white; }
+.companion-content .section-title em { color: #C4A0E8; }
+.companion-content p { margin-top: 1.5rem; font-size: 1rem; font-weight: 300; line-height: 1.9; color: rgba(255,255,255,0.6); }
+.trust-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+.trust-badge { padding: 0.5rem 1rem; border-radius: 2rem; border: 1px solid rgba(196,146,58,0.35); color: rgba(255,255,255,0.75); font-size: 0.8rem; font-weight: 300; background: rgba(196,146,58,0.08); display: flex; align-items: center; gap: 0.4rem; }
+.trust-badge::before { content: '✓'; font-size: 0.7rem; color: var(--gold); }
+.evidence-legend { margin-top: 2rem; padding: 1.25rem; border-radius: 1rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); }
+.legend-title { font-size: 0.68rem; font-weight: 500; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.9rem; }
+.legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+.legend-item { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
+.legend-item strong { color: rgba(255,255,255,0.65); font-weight: 500; }
+
+/* HOLISTIC */
+.holistic-section { background: var(--cream); }
+.holistic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem; }
+.pillar { padding: 2.5rem; border-radius: 1.5rem; transition: transform 0.2s; }
+.pillar:hover { transform: translateY(-6px); }
+.pillar-mind { background: var(--mauve-lt); } .pillar-body { background: var(--rose-lt); } .pillar-spirit { background: var(--gold-lt); }
+.pillar-icon { font-size: 2.5rem; margin-bottom: 1.25rem; }
+.pillar h3 { font-family: 'Cormorant Garant', serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 0.75rem; color: var(--ink); }
+.pillar p { font-size: 0.875rem; font-weight: 300; line-height: 1.8; color: var(--ink-muted); }
+.pillar-features { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.pillar-feat { font-size: 0.8rem; color: var(--ink-muted); display: flex; align-items: center; gap: 0.5rem; }
+.pillar-feat::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--rose); flex-shrink: 0; }
+
+/* DIFFERENTIATORS */
+.diff-section { background: white; }
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 4rem; }
+.diff-card { border: 1px solid var(--border); border-radius: 1.25rem; padding: 2.5rem; background: var(--cream); position: relative; overflow: hidden; }
+.diff-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.diff-card.rose::before { background: linear-gradient(90deg, var(--rose), var(--mauve)); }
+.diff-card.sage::before { background: linear-gradient(90deg, var(--sage), #9BC2A2); }
+.diff-card.gold::before { background: linear-gradient(90deg, var(--gold), #E8C17A); }
+.diff-card.mauve::before { background: linear-gradient(90deg, var(--mauve), #A082CE); }
+.diff-card h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.6rem; margin-top: 1rem; }
+.diff-card p { font-size: 0.875rem; font-weight: 300; line-height: 1.8; color: var(--ink-muted); }
+.diff-number { font-family: 'Cormorant Garant', serif; font-size: 3.5rem; font-weight: 300; color: rgba(194,99,122,0.12); position: absolute; top: 1rem; right: 1.5rem; line-height: 1; }
+
+/* CTA */
+.cta-section { background: var(--rose-dk); color: white; text-align: center; padding: 8rem 4rem; position: relative; overflow: hidden; }
+.cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 110%, rgba(123,94,167,0.35) 0%, transparent 60%); }
+.cta-section > * { position: relative; z-index: 1; }
+.cta-section .section-title { color: white; max-width: 700px; margin: 0 auto; font-size: clamp(2.5rem, 5vw, 4rem); }
+.cta-section .section-title em { color: rgba(255,230,240,0.9); }
+.cta-section p { margin-top: 1.5rem; font-size: 1.05rem; font-weight: 300; color: rgba(255,255,255,0.7); max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+.waitlist-form { display: flex; gap: 0.75rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
+.waitlist-input { padding: 1rem 1.5rem; border-radius: 3rem; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; width: 320px; backdrop-filter: blur(8px); transition: border-color 0.2s, background 0.2s; }
+.waitlist-input::placeholder { color: rgba(255,255,255,0.5); }
+.waitlist-input:focus { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.15); }
+.waitlist-btn { padding: 1rem 2rem; border-radius: 3rem; background: white; color: var(--rose-dk); border: none; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: transform 0.15s, background 0.2s; white-space: nowrap; }
+.waitlist-btn:hover { transform: translateY(-2px); background: var(--cream); }
+.cta-note { margin-top: 1rem; font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+
+/* FOOTER */
+footer { background: var(--ink); color: rgba(255,255,255,0.4); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+footer .nav-logo { color: rgba(255,255,255,0.7); }
+footer .nav-logo span { color: rgba(194,99,122,0.7); }
+footer p { font-size: 0.8rem; font-weight: 300; }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a { font-size: 0.8rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 960px) {
+  nav { padding: 1.25rem 2rem; } .nav-links { display: none; }
+  .section { padding: 5rem 2rem; } .hero { padding: 7rem 2rem 4rem; }
+  .hero-inner { grid-template-columns: 1fr; } .hero-visual { display: none; }
+  .features-intro, .dash-section-inner, .companion-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .feature-grid { grid-template-columns: 1fr 1fr; } .problem-grid { grid-template-columns: 1fr; }
+  .holistic-grid, .diff-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 5rem 2rem; }
+  footer { flex-direction: column; align-items: flex-start; padding: 2.5rem 2rem; }
+  .fb-right, .fb-left { display: none; }
+  .legend-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } .hero-stats { flex-direction: column; gap: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Pre<span>care</span></div>
+  <div class="nav-links">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#features">Features</a>
+    <a href="#companion">Our Approach</a>
+    <a href="#waitlist">Join Waitlist</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Join the Waitlist</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"><div class="badge-dot"></div>Coming Soon — Join the Waitlist</div>
+      <h1>A companion for<br><em>every phase</em> of<br><strong>womanhood</strong></h1>
+      <p class="hero-sub">Precare is a personalised women's health platform built for pregnancy, PCOS, and period wellness. Evidence-based guidance, Ayurvedic wisdom, and genuine care — all in one place.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
+        <a href="questionnaire.html" class="btn-ghost">Try the Questionnaire</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">3</div><div class="stat-label">Focus areas: pregnancy, PCOS and periods</div></div>
+        <div><div class="stat-num">50+</div><div class="stat-label">Features built for real women</div></div>
+        <div><div class="stat-num">1</div><div class="stat-label">Personalised dashboard, uniquely yours</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dashboard-preview-card">
+        <div class="dp-header">
+          <div class="dp-header-top">
+            <div class="dp-label">Your personalised dashboard</div>
+            <div class="dp-tabs">
+              <button class="dp-tab active">Pregnancy</button>
+              <button class="dp-tab">PCOS</button>
+              <button class="dp-tab">Period</button>
+            </div>
+          </div>
+          <div class="dp-user-row">
+            <div><div class="dp-greeting">Good morning,</div><div class="dp-name">Priya 👋</div></div>
+            <div class="dp-week-badge">Week 28</div>
+          </div>
+        </div>
+        <div class="dp-body">
+          <div class="dp-personalised-banner">
+            <div class="dp-banner-icon">✦</div>
+            <div>
+              <div class="dp-banner-text">Personalised for you</div>
+              <div class="dp-banner-sub">Your dashboard updates as your journey evolves</div>
+            </div>
+          </div>
+          <div class="dp-row">
+            <div class="dp-card"><div class="dp-card-label">Due date</div><div class="dp-card-val">14 Mar</div><div class="dp-card-sub">86 days to go</div></div>
+            <div class="dp-card"><div class="dp-card-label">Baby size</div><div class="dp-card-val">🥥</div><div class="dp-card-sub">Coconut — 38cm</div></div>
+            <div class="dp-card"><div class="dp-card-label">Kicks today</div><div class="dp-card-val">12</div><div class="dp-card-sub">Normal range</div></div>
+          </div>
+          <div class="dp-features-label">Your features</div>
+          <div class="dp-feat-row">
+            <div class="dp-feat first"><div class="dp-feat-icon">📋</div><div class="dp-feat-lbl">Questionnaire</div></div>
+            <div class="dp-feat"><div class="dp-feat-icon">🥗</div><div class="dp-feat-lbl">Nutrition</div></div>
+            <div class="dp-feat"><div class="dp-feat-icon">🌿</div><div class="dp-feat-lbl">Ayurvedic</div></div>
+            <div class="dp-feat"><div class="dp-feat-icon">📓</div><div class="dp-feat-lbl">Journal</div></div>
+            <div class="dp-feat"><div class="dp-feat-icon">🎯</div><div class="dp-feat-lbl">Milestones</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section problem-section reveal" id="problem">
+  <div class="section-label">The problem with existing apps</div>
+  <div class="section-title">Women deserve more than<br><em>commercial, one-size-fits-all apps</em></div>
+  <div class="problem-grid">
+    <div class="problem-item"><div class="problem-icon">🔬</div><h3>Not evidence-based</h3><p>Most apps are driven by commercial interests, not peer-reviewed research. Your health decisions deserve better foundations.</p></div>
+    <div class="problem-item"><div class="problem-icon">👤</div><h3>Zero personalisation</h3><p>Generic advice built for the average user ignores your unique medical history, lifestyle, and cultural context.</p></div>
+    <div class="problem-item"><div class="problem-icon">🧠</div><h3>Mental health is an afterthought</h3><p>PCOS, pregnancy, and postpartum affect mental health profoundly. Most apps rarely acknowledge this, let alone address it.</p></div>
+    <div class="problem-item"><div class="problem-icon">👩‍⚕️</div><h3>No connection to real care</h3><p>There is a critical gap between your app and your doctor or ASHA worker. Precare bridges that gap with real integration.</p></div>
+    <div class="problem-item"><div class="problem-icon">🏃‍♀️</div><h3>Body and spirit neglected</h3><p>Physical activity, Ayurvedic practices, and spiritual wellness are rarely part of the picture. Holistic health is the whole point.</p></div>
+    <div class="problem-item"><div class="problem-icon">🌐</div><h3>Language and access barriers</h3><p>Women across India face real barriers to quality health information. Language should never be one of them.</p></div>
+  </div>
+</section>
+
+<!-- DASHBOARD PHONE — PREGNANCY -->
+<section class="section dash-section reveal" id="dashboard">
+  <div class="dash-section-inner">
+    <div class="dash-text">
+      <div class="section-label">Your personalised dashboard</div>
+      <div class="section-title">A home screen built<br>entirely <em>around you</em></div>
+      <p>When you open Precare, you do not see a generic feed. You tell us your use case — pregnancy, PCOS, or period care — and we build a personalised dashboard around exactly where you are today.</p>
+      <div class="dash-bullets">
+        <div class="dash-bullet"><div class="dash-bullet-dot"></div>Your due date and baby's current size, compared to a fruit, updated each week</div>
+        <div class="dash-bullet"><div class="dash-bullet-dot"></div>A thought of the day to keep you grounded through every trimester</div>
+        <div class="dash-bullet"><div class="dash-bullet-dot"></div>Your personalised feature set, scrollable and always within reach</div>
+        <div class="dash-bullet"><div class="dash-bullet-dot"></div>The dashboard changes as your journey evolves — always relevant, never generic</div>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ph1-top">
+            <div class="ph1-header">
+              <div><div class="ph1-greet">Good morning,</div><div class="ph1-name">Priya 👋</div></div>
+              <div class="ph1-week">Week 28</div>
+            </div>
+            <div class="ph1-baby-card">
+              <div class="ph1-baby-top">
+                <div class="ph1-baby-label">Your baby this week</div>
+                <div class="ph1-due">Due <strong>14 Mar 2026</strong></div>
+              </div>
+              <div class="ph1-fruit-row">
+                <div class="ph1-baby-emoji">👶</div>
+                <div class="ph1-compare">
+                  <div class="ph1-compare-label">About the size of a</div>
+                  <div class="ph1-fruit-emoji">🥥</div>
+                  <div class="ph1-fruit-name">Coconut</div>
+                  <div class="ph1-fruit-size">~38 cm, ~1 kg</div>
+                </div>
+              </div>
+            </div>
+            <div class="ph1-thought">"Your body is doing something extraordinary. Rest in that today."</div>
+            <div class="ph1-feat-label">Your features</div>
+            <div class="ph1-feats">
+              <div class="ph1-feat hl"><div class="ph1-feat-icon">📋</div><div class="ph1-feat-lbl">Questionnaire</div></div>
+              <div class="ph1-feat"><div class="ph1-feat-icon">🥗</div><div class="ph1-feat-lbl">Nutrition</div></div>
+              <div class="ph1-feat"><div class="ph1-feat-icon">👶</div><div class="ph1-feat-lbl">Kick Counter</div></div>
+              <div class="ph1-feat"><div class="ph1-feat-icon">🌿</div><div class="ph1-feat-lbl">Ayurvedic</div></div>
+              <div class="ph1-feat"><div class="ph1-feat-icon">📓</div><div class="ph1-feat-lbl">Journal</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="float-badge fb-right">
+        <div class="fb-inner"><div class="fb-dot fb-dot-green"></div><div><div class="fb-text">Personalised for you</div><div class="fb-sub">Updated this week</div></div></div>
+      </div>
+      <div class="float-badge fb-left">
+        <div><div class="fb-text" style="font-family:'Cormorant Garant',serif;font-size:1rem;font-weight:600;color:var(--rose-dk);">🥥 Coconut</div><div class="fb-sub">Baby is 38 cm this week</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section features-section reveal" id="features">
+  <div class="features-intro">
+    <div>
+      <div class="section-label">Everything you need</div>
+      <div class="section-title">Built for every chapter<br>of a <em>woman's life</em></div>
+    </div>
+    <p>From trying to conceive, through pregnancy and into postpartum recovery, Precare is with you at every step — tracking, advising, supporting, and connecting you to the care you deserve.</p>
+  </div>
+  <div class="features-tabs">
+    <button class="tab-btn active" onclick="showFeatures('pregnancy', this)">Pregnancy</button>
+    <button class="tab-btn" onclick="showFeatures('pcos', this)">PCOS / PCOD</button>
+    <button class="tab-btn" onclick="showFeatures('period', this)">Period Wellness</button>
+    <button class="tab-btn" onclick="showFeatures('postpartum', this)">Postpartum</button>
+  </div>
+  <div class="feature-grid" id="feature-grid"></div>
+</section>
+
+<!-- COMPANION — PCOS QUESTIONNAIRE PHONE -->
+<section class="section companion-section reveal" id="companion">
+  <div class="companion-inner">
+    <div class="companion-content">
+      <div class="section-label">Research, personalised</div>
+      <div class="section-title">Guidance rooted in<br><em>trusted evidence</em></div>
+      <p>Every recommendation in Precare is grounded in peer-reviewed research and clinical evidence. Start with a questionnaire and Precare uses your answers to predict risk, generate personalised recommendations, and ensure every insight it shares is specific to you — not some average user.</p>
+      <div class="trust-badges">
+        <div class="trust-badge">Evidence-based guidance</div>
+        <div class="trust-badge">Research-backed recommendations</div>
+        <div class="trust-badge">Learns from your questionnaire</div>
+        <div class="trust-badge">Clinically graded sources</div>
+      </div>
+      <div class="evidence-legend">
+        <div class="legend-title">Evidence grading system</div>
+        <div class="legend-grid">
+          <div class="legend-item"><strong>EBR</strong> — Evidence-based recommendation</div>
+          <div class="legend-item"><strong>CCR</strong> — Clinical consensus recommendation</div>
+          <div class="legend-item"><strong>CPP</strong> — Clinical practice point</div>
+          <div class="legend-item"><strong>⊕⊕⊕⊕</strong> High quality evidence</div>
+          <div class="legend-item"><strong>⊕⊕⊕○</strong> Moderate quality evidence</div>
+          <div class="legend-item"><strong>⊕⊕○○</strong> Low quality evidence</div>
+          <div class="legend-item"><strong>****</strong> Strong recommendation</div>
+          <div class="legend-item"><strong>***</strong> Conditional recommendation</div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="ph2-screen">
+          <div class="ph2-header">
+            <div class="ph2-back">←</div>
+            <div class="ph2-title">PCOS Risk Assessment</div>
+            <div class="ph2-badge">EBR</div>
+          </div>
+          <div class="ph2-progress"><div class="ph2-progress-fill"></div></div>
+          <div class="ph2-q">
+            <div class="ph2-q-text">How regular are your menstrual cycles?</div>
+            <div class="ph2-opts">
+              <div class="ph2-opt sel">Irregular (more than 35 days apart)</div>
+              <div class="ph2-opt">Regular (21–35 days)</div>
+              <div class="ph2-opt">Very irregular or absent</div>
+            </div>
+          </div>
+          <div class="ph2-q" style="margin-top:0.5rem;">
+            <div class="ph2-q-text">Do you experience acne, hair fall, or excess facial hair?</div>
+            <div class="ph2-opts">
+              <div class="ph2-opt">Rarely</div>
+              <div class="ph2-opt sel">Sometimes — acne and hair fall</div>
+              <div class="ph2-opt">Frequently and noticeably</div>
+            </div>
+          </div>
+          <div class="ph2-divider"></div>
+          <div class="ph2-result">
+            <div class="ph2-result-top">
+              <div class="ph2-risk-dot"></div>
+              <div class="ph2-risk-label">Based on your answers, you show markers associated with PCOS</div>
+              <div class="ph2-risk-level">Moderate risk</div>
+            </div>
+            <div class="ph2-recs-title">Your personalised recommendations</div>
+            <div class="ph2-rec"><div class="ph2-rec-dot"></div><div class="ph2-rec-text">Consult a gynaecologist for hormonal panel (LH, FSH, testosterone)</div></div>
+            <div class="ph2-rec"><div class="ph2-rec-dot"></div><div class="ph2-rec-text">Begin anti-inflammatory nutrition plan — tailored to your profile</div></div>
+            <div class="ph2-rec"><div class="ph2-rec-dot"></div><div class="ph2-rec-text">Ayurvedic regulation: Shatavari and Ashwagandha guidance</div></div>
+            <div class="ph2-rec"><div class="ph2-rec-dot"></div><div class="ph2-rec-text">Cycle phase tracking enabled in your dashboard</div></div>
+          </div>
+          <div class="ph2-evb">
+            <span class="ph2-evb-chip ph2-evb-type">EBR</span>
+            <span class="ph2-evb-chip ph2-evb-q">⊕⊕⊕○ Moderate</span>
+            <span class="ph2-evb-chip ph2-evb-s">*** Conditional</span>
+          </div>
+        </div>
+      </div>
+      <div class="float-badge fb-right">
+        <div class="fb-inner"><div class="fb-dot fb-dot-mauve"></div><div><div class="fb-text">Rule-based risk scoring</div><div class="fb-sub">Built on clinical markers</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOLISTIC -->
+<section class="section holistic-section reveal" id="wellness">
+  <div style="text-align:center; max-width:640px; margin:0 auto;">
+    <div class="section-label">Holistic wellness philosophy</div>
+    <div class="section-title">Mind. Body. <em>Spirit.</em></div>
+    <p style="margin-top:1rem; font-size:1rem; font-weight:300; line-height:1.9; color:var(--ink-muted);">Precare is built on the belief that true health cannot be reduced to data points alone. We address the whole woman — integrating modern medicine with ancient Ayurvedic wisdom.</p>
+  </div>
+  <div class="holistic-grid">
+    <div class="pillar pillar-mind">
+      <div class="pillar-icon">🧠</div><h3>Mind</h3>
+      <p>Mental health is healthcare. Precare provides genuine psychological support through every hormonal shift and life stage.</p>
+      <div class="pillar-features">
+        <div class="pillar-feat">Postpartum depression monitoring</div>
+        <div class="pillar-feat">Anxiety and mood tracking</div>
+        <div class="pillar-feat">Personal journal for emotional wellbeing</div>
+        <div class="pillar-feat">Music therapy integration</div>
+        <div class="pillar-feat">Compassionate health check-ins</div>
+      </div>
+    </div>
+    <div class="pillar pillar-body">
+      <div class="pillar-icon">💪</div><h3>Body</h3>
+      <p>Evidence-based physical guidance tailored to your trimester, cycle stage, or PCOS journey.</p>
+      <div class="pillar-features">
+        <div class="pillar-feat">Trimester-safe exercise plans</div>
+        <div class="pillar-feat">Personalised nutrition and meal planning</div>
+        <div class="pillar-feat">Symptom and cycle tracking</div>
+        <div class="pillar-feat">Ovulation and period tracking</div>
+        <div class="pillar-feat">Real-time health monitoring</div>
+      </div>
+    </div>
+    <div class="pillar pillar-spirit">
+      <div class="pillar-icon">✨</div><h3>Spirit</h3>
+      <p>Rooted in Ayurvedic tradition, Precare helps restore balance naturally and reduce reliance on pharmaceuticals.</p>
+      <div class="pillar-features">
+        <div class="pillar-feat">Ayurvedic hormonal regulation guidance</div>
+        <div class="pillar-feat">Herb and supplement recommendations</div>
+        <div class="pillar-feat">Reducing pharmaceutical dependence</div>
+        <div class="pillar-feat">Breathwork and mindfulness practices</div>
+        <div class="pillar-feat">Cultural wellness traditions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATORS -->
+<section class="section diff-section reveal">
+  <div class="section-label">Why Precare is different</div>
+  <div class="section-title">Not just another <em>period tracker</em></div>
+  <div class="diff-grid">
+    <div class="diff-card rose"><div class="diff-number">01</div><h3>Evidence-based guidance, always</h3><p>Every recommendation is grounded in peer-reviewed research. We are not commercial. We are built to be trusted, and you will always know why we suggest what we suggest.</p></div>
+    <div class="diff-card mauve"><div class="diff-number">02</div><h3>Doctor and frontline worker integration</h3><p>Precare connects you to your OB-GYN, ASHA worker, or specialist directly — sharing relevant data, flagging risks, and keeping your care team in the loop.</p></div>
+    <div class="diff-card sage"><div class="diff-number">03</div><h3>Multi-lingual and accessible</h3><p>Built for every woman in India and beyond, across languages, literacy levels, and socioeconomic backgrounds. Your health information, in your language.</p></div>
+    <div class="diff-card gold"><div class="diff-number">04</div><h3>Ayurveda meets modern guidance</h3><p>The only platform that genuinely integrates Ayurvedic practice with modern health intelligence, reducing drug dependence and achieving sustainable hormonal balance.</p></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section" id="waitlist">
+  <div class="section-label" style="color:rgba(255,255,255,0.5);">Join Precare</div>
+  <div class="section-title">Be among the first women to experience <em>healthcare that truly sees you</em></div>
+  <p>We are building Precare in close collaboration with women, doctors, and researchers. Join our waitlist to get early access and be the first to know when we launch.</p>
+  <div class="waitlist-form">
+    <input type="email" class="waitlist-input" placeholder="Enter your email address" id="email-input">
+    <button class="waitlist-btn" onclick="handleWaitlist()">Join the Waitlist</button>
+  </div>
+  <div class="cta-note" id="waitlist-msg">Your data is private. No spam, ever. Just meaningful updates.</div>
+</section>
+
+<footer>
+  <div class="nav-logo">Pre<span>care</span></div>
+  <p>2025 Precare Health Technologies. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+const features = {
+  pregnancy: [
+    { icon: '📋', cls: 'icon-rose', title: 'Take the Questionnaire', desc: 'Start with a detailed health assessment. Your answers shape everything Precare shows and suggests from day one.' },
+    { icon: '🥗', cls: 'icon-gold', title: 'Nutritional Guidance', desc: 'Trimester-specific meal plans and Ayurvedic nutritional advice built around your dietary preferences and health profile.' },
+    { icon: '👶', cls: 'icon-sage', title: 'Baby Kick Counter', desc: 'Log and track foetal movement patterns to stay connected to your baby and spot any changes early.' },
+    { icon: '📸', cls: 'icon-rose', title: 'Belly Photo Journal', desc: 'A beautiful, auto-organised timeline of your pregnancy journey, week by week.' },
+    { icon: '🏷️', cls: 'icon-mauve', title: 'Baby Name Finder', desc: 'Discover names by origin, meaning, and style. Shortlist your favourites and share with your partner.' },
+    { icon: '🎯', cls: 'icon-gold', title: 'Milestone Tracking', desc: 'Celebrate every step of your journey. Watch your progress grow as you reach each milestone together.' },
+    { icon: '📓', cls: 'icon-sage', title: 'Personal Journal', desc: 'A private space to write, reflect, and process the experience of pregnancy without any judgement.' },
+    { icon: '🔬', cls: 'icon-rose', title: 'Ultrasound Tracker', desc: 'Upload and track your scans over time, with notes from each visit organised in one place.' },
+    { icon: '📦', cls: 'icon-mauve', title: 'Everything You Should Know', desc: 'Breastfeeding guidance, hospital bag essentials, and your complete shopping checklist — all in one place.' },
+  ],
+  pcos: [
+    { icon: '📋', cls: 'icon-rose', title: 'Take the Questionnaire', desc: 'A rule-based risk assessment that identifies your PCOS markers and generates personalised recommendations immediately.' },
+    { icon: '🔴', cls: 'icon-mauve', title: 'Cycle Phase Tracker', desc: 'Understand your menstrual phases, hormonal shifts, and what to expect at each stage of your cycle.' },
+    { icon: '🌿', cls: 'icon-sage', title: 'Ayurvedic Recommendations', desc: 'A curated, evidence-referenced guide to Ayurvedic approaches for hormonal balance and PCOS symptom management.' },
+    { icon: '🏃', cls: 'icon-gold', title: 'Lifestyle Management', desc: 'Personalised lifestyle guidance covering movement, sleep, stress, and daily routines adapted to your PCOS profile.' },
+    { icon: '🥗', cls: 'icon-rose', title: 'Nutritional Guidance', desc: 'Anti-inflammatory meal planning and dietary advice designed for insulin resistance and long-term hormonal health.' },
+    { icon: '🧠', cls: 'icon-mauve', title: 'Psychological Support', desc: 'PCOS affects self-worth and mood. Precare addresses this directly with consistent, compassionate check-ins.' },
+  ],
+  period: [
+    { icon: '📋', cls: 'icon-rose', title: 'Take the Questionnaire', desc: 'A guided health assessment that personalises your cycle tracking and wellness guidance from the very first session.' },
+    { icon: '🗓️', cls: 'icon-mauve', title: 'Period and Cycle Tracker', desc: 'Intelligent cycle tracking that learns your unique rhythm over time and flags anything worth discussing with a doctor.' },
+    { icon: '🥚', cls: 'icon-sage', title: 'Ovulation Tracker', desc: 'Pinpoint your fertile window with multi-signal tracking including temperature and physical indicators.' },
+    { icon: '📝', cls: 'icon-gold', title: 'Symptom Tracker', desc: 'Log and understand your symptoms across your cycle, with pattern recognition that builds over time.' },
+    { icon: '🌿', cls: 'icon-rose', title: 'Ayurvedic Remedies', desc: 'Curated natural and Ayurvedic interventions for period pain, PMS, and cycle irregularities.' },
+    { icon: '🏃', cls: 'icon-mauve', title: 'Lifestyle Management', desc: 'Movement, nutrition, and daily routine guidance adapted to each phase of your menstrual cycle.' },
+  ],
+  postpartum: [
+    { icon: '📋', cls: 'icon-rose', title: 'Take the Questionnaire', desc: 'A postpartum health assessment that picks up where your pregnancy profile left off and adapts your dashboard for recovery.' },
+    { icon: '📦', cls: 'icon-mauve', title: 'Everything You Should Know', desc: 'Breastfeeding guidance, practical checklists, and postpartum essentials all gathered in one straightforward place.' },
+    { icon: '💙', cls: 'icon-sage', title: 'Emotional Wellbeing Check-ins', desc: 'Regular, sensitive check-ins designed to surface signs of postpartum depression early, with clear pathways to support.' },
+    { icon: '🏃', cls: 'icon-gold', title: 'Recovery Movement Plans', desc: 'Safe, progressive return-to-movement plans designed for postpartum recovery, starting from exactly where you are.' },
+    { icon: '🎯', cls: 'icon-rose', title: 'Milestone Tracking', desc: 'Track both your recovery and your baby\'s development side by side as you grow into this new chapter together.' },
+    { icon: '📓', cls: 'icon-mauve', title: 'Personal Journal', desc: 'A private, safe space to process the complexity of new motherhood, free of judgement and open at any hour.' },
+  ]
+};
+
+function showFeatures(key, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const grid = document.getElementById('feature-grid');
+  grid.style.opacity = '0'; grid.style.transform = 'translateY(10px)';
+  setTimeout(() => {
+    grid.innerHTML = features[key].map(f => `<div class="feature-card"><div class="feature-icon ${f.cls}">${f.icon}</div><h3>${f.title}</h3><p>${f.desc}</p></div>`).join('');
+    grid.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    grid.style.opacity = '1'; grid.style.transform = 'translateY(0)';
+  }, 150);
+}
+
+function handleWaitlist() {
+  const email = document.getElementById('email-input').value;
+  const msg = document.getElementById('waitlist-msg');
+  if (!email || !email.includes('@')) { msg.textContent = 'Please enter a valid email address.'; msg.style.color = '#FFB3C0'; return; }
+  msg.textContent = "You're on the list. We'll be in touch soon. Thank you for believing in Precare.";
+  msg.style.color = 'rgba(255,255,255,0.8)';
+  document.getElementById('email-input').value = '';
+}
+
+showFeatures('pregnancy', document.querySelector('.tab-btn.active'));
+
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+document.querySelectorAll('.dp-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.dp-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

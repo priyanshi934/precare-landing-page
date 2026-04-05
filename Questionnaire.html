@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precare — PCOS Risk Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --rose:#C2637A;--rose-lt:#F5E6EB;--rose-dk:#8A3A50;
+  --mauve:#7B5EA7;--mauve-lt:#EDE8F5;
+  --sage:#6B8F71;--sage-lt:#E7F0E8;
+  --gold:#C4923A;--gold-lt:#FBF0DC;
+  --cream:#FBF7F2;--ink:#1E1618;--ink-muted:#6B5860;
+  --border:rgba(194,99,122,0.15);
+  --red:#C94040;--red-lt:#FDEAEA;
+}
+html,body{min-height:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+.q-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(251,247,242,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.q-logo{font-family:'Cormorant Garant',serif;font-size:1.4rem;font-weight:600;color:var(--rose-dk);text-decoration:none;letter-spacing:-0.02em;}
+.q-logo span{color:var(--mauve);font-style:italic;}
+.q-step-label{font-size:0.78rem;color:var(--ink-muted);}
+
+.progress-wrap{position:fixed;top:60px;left:0;right:0;z-index:99;height:3px;background:rgba(194,99,122,0.1);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--mauve));transition:width 0.5s ease;border-radius:0 2px 2px 0;}
+
+.q-outer{min-height:100vh;padding:5.5rem 1.5rem 3rem;display:flex;justify-content:center;align-items:flex-start;}
+.q-card{width:100%;max-width:700px;background:white;border:1px solid var(--border);border-radius:1.75rem;padding:2.75rem;box-shadow:0 24px 64px rgba(194,99,122,0.08);}
+
+.step{display:none;}
+.step.active{display:block;animation:fadeUp 0.35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+.step-tag{font-size:0.7rem;font-weight:500;color:var(--rose);text-transform:uppercase;letter-spacing:0.09em;margin-bottom:0.5rem;}
+.step-title{font-family:'Cormorant Garant',serif;font-size:2rem;font-weight:400;line-height:1.15;margin-bottom:0.5rem;}
+.step-title em{font-style:italic;color:var(--rose);}
+.step-sub{font-size:0.875rem;font-weight:300;color:var(--ink-muted);line-height:1.75;margin-bottom:2rem;max-width:560px;}
+
+.q-group{margin-bottom:2rem;}
+.q-label{font-size:0.9rem;font-weight:500;color:var(--ink);margin-bottom:0.6rem;line-height:1.5;}
+.q-hint{font-size:0.75rem;color:var(--ink-muted);margin-bottom:0.5rem;font-weight:300;font-style:italic;}
+
+.options{display:flex;flex-direction:column;gap:0.45rem;}
+.opt{display:flex;align-items:center;gap:0.75rem;padding:0.8rem 1.1rem;border-radius:0.85rem;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;font-size:0.875rem;color:var(--ink);font-weight:400;width:100%;text-align:left;}
+.opt:hover{border-color:var(--rose);background:var(--rose-lt);}
+.opt.selected{border-color:var(--rose);background:var(--rose-lt);color:var(--rose-dk);}
+.opt.selected .opt-dot{background:var(--rose);border-color:var(--rose);}
+.opt-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(194,99,122,0.3);flex-shrink:0;transition:all 0.18s;}
+
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.input-group{display:flex;flex-direction:column;gap:0.35rem;}
+.input-lbl{font-size:0.78rem;font-weight:500;color:var(--ink-muted);}
+.inp-wrap{position:relative;}
+.q-inp{width:100%;padding:0.75rem 1rem;border-radius:0.75rem;border:1.5px solid var(--border);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--ink);outline:none;transition:border-color 0.2s;-moz-appearance:textfield;}
+.q-inp:focus{border-color:var(--rose);background:white;}
+.q-inp::-webkit-outer-spin-button,.q-inp::-webkit-inner-spin-button{-webkit-appearance:none;}
+.inp-unit{position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:0.72rem;color:var(--ink-muted);pointer-events:none;}
+
+.calc-row{display:flex;gap:1rem;margin-top:0.75rem;}
+.calc-box{flex:1;padding:0.75rem 1rem;border-radius:0.75rem;background:var(--cream);border:1px solid var(--border);}
+.calc-lbl{font-size:0.6rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.06em;}
+.calc-val{font-family:'Cormorant Garant',serif;font-size:1.4rem;font-weight:600;color:var(--rose-dk);margin-top:0.1rem;}
+.calc-interp{font-size:0.62rem;color:var(--ink-muted);margin-top:0.1rem;}
+
+.mfg-wrap{border:1px solid var(--border);border-radius:1rem;overflow:hidden;margin-top:0.5rem;}
+.mfg-head{display:grid;grid-template-columns:1fr repeat(5,42px);background:var(--rose-lt);padding:0.6rem 1rem;}
+.mfg-head-lbl{font-size:0.62rem;font-weight:500;color:var(--rose-dk);text-transform:uppercase;letter-spacing:0.05em;}
+.mfg-head-n{font-size:0.62rem;font-weight:500;color:var(--rose-dk);text-align:center;}
+.mfg-row{display:grid;grid-template-columns:1fr repeat(5,42px);padding:0.55rem 1rem;border-top:1px solid var(--border);align-items:center;}
+.mfg-row:hover{background:rgba(194,99,122,0.03);}
+.mfg-site-name{font-size:0.82rem;color:var(--ink);}
+.mfg-cell{display:flex;justify-content:center;}
+.mfg-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(194,99,122,0.22);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+.mfg-dot:hover{border-color:var(--rose);background:var(--rose-lt);}
+.mfg-dot.sel{background:var(--rose);border-color:var(--rose);}
+.mfg-dot.sel::after{content:'';width:7px;height:7px;border-radius:50%;background:white;}
+.mfg-footer{display:flex;justify-content:space-between;align-items:center;padding:0.7rem 1rem;background:var(--rose-lt);border-top:1px solid var(--border);}
+.mfg-footer-lbl{font-size:0.72rem;font-weight:500;color:var(--rose-dk);}
+.mfg-footer-sub{font-size:0.6rem;color:var(--ink-muted);}
+.mfg-footer-val{font-family:'Cormorant Garant',serif;font-size:1.5rem;font-weight:600;color:var(--rose-dk);}
+
+.chips{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.chip{padding:0.45rem 0.9rem;border-radius:2rem;border:1.5px solid var(--border);background:var(--cream);font-size:0.8rem;color:var(--ink-muted);cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;}
+.chip:hover{border-color:var(--rose);color:var(--rose);}
+.chip.sel{background:var(--rose-lt);border-color:var(--rose);color:var(--rose-dk);font-weight:500;}
+
+.alert-box{padding:0.85rem 1.1rem;border-radius:0.75rem;margin-top:0.5rem;}
+.alert-warn{background:var(--gold-lt);border:1px solid rgba(196,146,58,0.3);}
+.alert-warn .alert-title{font-size:0.75rem;font-weight:500;color:var(--gold);margin-bottom:0.2rem;}
+.alert-warn p{font-size:0.72rem;color:var(--ink-muted);line-height:1.5;}
+
+.usecase-grid{display:flex;flex-direction:column;gap:0.85rem;}
+.uc-card{padding:1.4rem 1.5rem;border-radius:1.25rem;border:2px solid var(--border);background:var(--cream);cursor:pointer;transition:all 0.2s;display:flex;align-items:flex-start;gap:1rem;}
+.uc-card:hover{border-color:var(--rose);transform:translateY(-1px);box-shadow:0 12px 32px rgba(194,99,122,0.1);}
+.uc-card.sel{border-color:var(--rose);background:var(--rose-lt);}
+.uc-icon{font-size:1.75rem;flex-shrink:0;margin-top:0.1rem;}
+.uc-body{}
+.uc-title{font-size:0.95rem;font-weight:500;margin-bottom:0.2rem;}
+.uc-sub{font-size:0.78rem;color:var(--ink-muted);font-weight:300;line-height:1.5;}
+.uc-badge{display:inline-block;margin-top:0.4rem;padding:0.18rem 0.6rem;border-radius:1rem;font-size:0.62rem;font-weight:500;}
+.badge-go{background:var(--rose-lt);color:var(--rose-dk);border:1px solid rgba(194,99,122,0.2);}
+.badge-soon{background:var(--sage-lt);color:var(--sage);border:1px solid rgba(107,143,113,0.2);}
+
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.btn-back{padding:0.75rem 1.5rem;border-radius:2rem;border:1.5px solid var(--border);background:none;color:var(--ink-muted);font-family:'DM Sans',sans-serif;font-size:0.875rem;cursor:pointer;transition:all 0.2s;}
+.btn-back:hover{border-color:var(--rose);color:var(--rose);}
+.btn-next{padding:0.85rem 2rem;border-radius:2rem;background:var(--ink);color:white;border:none;font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:500;cursor:pointer;transition:all 0.2s;}
+.btn-next:hover{background:var(--rose-dk);transform:translateY(-1px);}
+.btn-next:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+.btn-submit{background:var(--rose);}
+.btn-submit:hover{background:var(--rose-dk);}
+
+/* RESULTS */
+.results{display:none;}
+.results.active{display:block;animation:fadeUp 0.5s ease both;}
+
+.risk-hero{padding:2rem;text-align:center;border-radius:1.25rem;margin-bottom:1.5rem;}
+.risk-hero.high{background:linear-gradient(135deg,#FDEAEA,#FAD5D5);}
+.risk-hero.moderate{background:linear-gradient(135deg,#FBF0DC,#F5E2C0);}
+.risk-hero.low{background:linear-gradient(135deg,#E7F0E8,#D2E8D4);}
+.risk-tag{font-size:0.68rem;font-weight:500;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:0.4rem;}
+.risk-hero.high .risk-tag{color:var(--red);}
+.risk-hero.moderate .risk-tag{color:var(--gold);}
+.risk-hero.low .risk-tag{color:var(--sage);}
+.risk-tier-label{font-family:'Cormorant Garant',serif;font-size:2.8rem;font-weight:600;line-height:1;}
+.risk-hero.high .risk-tier-label{color:var(--red);}
+.risk-hero.moderate .risk-tier-label{color:var(--gold);}
+.risk-hero.low .risk-tier-label{color:var(--sage);}
+.risk-desc{font-size:0.82rem;font-weight:300;color:var(--ink-muted);max-width:420px;margin:0.75rem auto 0;line-height:1.65;}
+
+.gauge-wrap{display:flex;justify-content:center;margin:1.25rem 0 0.5rem;}
+.gauge-container{position:relative;width:150px;height:150px;}
+.gauge-svg{transform:rotate(-90deg);}
+.g-bg{fill:none;stroke:rgba(194,99,122,0.1);stroke-width:12;}
+.g-fill{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(0.34,1.56,0.64,1);}
+.g-fill.high{stroke:var(--red);}
+.g-fill.moderate{stroke:var(--gold);}
+.g-fill.low{stroke:var(--sage);}
+.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.gauge-num{font-family:'Cormorant Garant',serif;font-size:2.4rem;font-weight:600;color:var(--ink);line-height:1;}
+.gauge-den{font-size:0.65rem;color:var(--ink-muted);}
+
+.res-sec{margin-bottom:2rem;}
+.res-sec-title{font-size:0.7rem;font-weight:500;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.09em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+
+.crit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;}
+.crit-card{padding:1rem;border-radius:0.85rem;border:1px solid var(--border);text-align:center;}
+.crit-emoji{font-size:1.2rem;margin-bottom:0.35rem;}
+.crit-name{font-size:0.58rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;line-height:1.4;}
+.crit-badge{font-size:0.7rem;font-weight:500;padding:0.2rem 0.5rem;border-radius:0.35rem;display:inline-block;}
+.cb-pos{background:rgba(201,64,64,0.1);color:var(--red);}
+.cb-unc{background:var(--gold-lt);color:var(--gold);}
+.cb-neg{background:var(--sage-lt);color:var(--sage);}
+.cb-unk{background:rgba(107,143,113,0.08);color:var(--ink-muted);}
+.crit-conf{font-size:0.58rem;color:var(--ink-muted);margin-top:0.3rem;line-height:1.4;}
+
+.sig-list{display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.5rem;}
+.sig-chip{padding:0.18rem 0.55rem;border-radius:1rem;font-size:0.6rem;background:var(--rose-lt);color:var(--rose-dk);border:1px solid rgba(194,99,122,0.18);}
+
+.flag{padding:0.8rem 1rem;border-radius:0.75rem;margin-bottom:0.5rem;display:flex;gap:0.7rem;align-items:flex-start;}
+.f1{background:rgba(201,64,64,0.06);border:1px solid rgba(201,64,64,0.18);}
+.f2{background:rgba(196,146,58,0.07);border:1px solid rgba(196,146,58,0.22);}
+.f3{background:rgba(123,94,167,0.05);border:1px solid rgba(123,94,167,0.18);}
+.f4{background:rgba(107,143,113,0.05);border:1px solid rgba(107,143,113,0.18);}
+.flag-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.f1 .flag-dot{background:var(--red);}
+.f2 .flag-dot{background:var(--gold);}
+.f3 .flag-dot{background:var(--mauve);}
+.f4 .flag-dot{background:var(--sage);}
+.flag-cat{font-size:0.6rem;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.18rem;}
+.f1 .flag-cat{color:var(--red);}
+.f2 .flag-cat{color:var(--gold);}
+.f3 .flag-cat{color:var(--mauve);}
+.f4 .flag-cat{color:var(--sage);}
+.flag-msg{font-size:0.8rem;color:var(--ink);line-height:1.5;}
+.flag-action{font-size:0.72rem;color:var(--ink-muted);margin-top:0.18rem;font-weight:300;line-height:1.5;}
+
+.p-divider{font-size:0.65rem;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;margin:1rem 0 0.5rem;}
+.p-divider.p1{color:var(--red);}
+.p-divider.p2{color:var(--gold);}
+.p-divider.p3{color:var(--mauve);}
+.p-divider.p4{color:var(--sage);}
+
+.evb-row{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.6rem;}
+.evb{padding:0.18rem 0.55rem;border-radius:0.4rem;font-size:0.62rem;font-weight:500;}
+.evb-t{background:rgba(123,94,167,0.1);border:1px solid rgba(123,94,167,0.22);color:var(--mauve);}
+.evb-q{background:var(--gold-lt);border:1px solid rgba(196,146,58,0.22);color:var(--gold);}
+.evb-s{background:var(--sage-lt);border:1px solid rgba(107,143,113,0.22);color:var(--sage);}
+
+.inv-list{list-style:none;}
+.inv-item{display:flex;align-items:flex-start;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;color:var(--ink);line-height:1.5;}
+.inv-item:last-child{border-bottom:none;}
+.inv-dot{width:5px;height:5px;border-radius:50%;background:var(--mauve);flex-shrink:0;margin-top:0.45rem;}
+
+.phenotype-box{margin-top:1rem;padding:0.85rem 1rem;background:var(--cream);border-radius:0.75rem;font-size:0.78rem;line-height:1.6;color:var(--ink-muted);}
+.phenotype-box strong{color:var(--ink);}
+
+.disclaimer{padding:1rem 1.25rem;border-radius:0.75rem;background:rgba(123,94,167,0.05);border:1px solid rgba(123,94,167,0.14);font-size:0.72rem;color:var(--ink-muted);line-height:1.6;margin-top:2rem;}
+
+.res-cta{text-align:center;padding:2rem 1.5rem;background:linear-gradient(135deg,var(--rose-lt),var(--mauve-lt));border-radius:1.25rem;margin-top:1.5rem;}
+.res-cta-title{font-family:'Cormorant Garant',serif;font-size:1.5rem;font-weight:400;margin-bottom:0.4rem;}
+.res-cta-sub{font-size:0.8rem;color:var(--ink-muted);font-weight:300;margin-bottom:1.25rem;line-height:1.6;}
+.btn-cta{padding:0.85rem 2rem;border-radius:2rem;background:var(--rose);color:white;border:none;font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-block;}
+.btn-cta:hover{background:var(--rose-dk);transform:translateY(-1px);}
+
+@media(max-width:600px){
+  .q-card{padding:1.5rem;border-radius:1.25rem;}
+  .input-row{grid-template-columns:1fr;}
+  .crit-grid{grid-template-columns:1fr;}
+  .mfg-head,.mfg-row{grid-template-columns:1fr repeat(5,36px);padding:0.5rem 0.75rem;}
+  .q-header{padding:1rem 1.25rem;}
+}
+</style>
+</head>
+<body>
+
+<header class="q-header">
+  <a href="index.html" class="q-logo">Pre<span>care</span></a>
+  <div class="q-step-label" id="step-label">PCOS Risk Assessment</div>
+</header>
+<div class="progress-wrap">
+  <div class="progress-fill" id="prog" style="width:0%"></div>
+</div>
+
+<div class="q-outer">
+  <div class="q-card" id="qcard">
+
+    <!-- STEP 0: Use case -->
+    <div class="step active" id="step-0">
+      <div class="step-tag">Welcome to Precare</div>
+      <div class="step-title">What brings you<br>to <em>Precare</em> today?</div>
+      <div class="step-sub">We will personalise your entire experience based on your needs. Select your primary reason for using Precare.</div>
+      <div class="usecase-grid">
+        <div class="uc-card" onclick="pickUseCase('pcos',this)">
+          <div class="uc-icon">🔴</div>
+          <div class="uc-body">
+            <div class="uc-title">PCOS / PCOD Monitoring</div>
+            <div class="uc-sub">Assess your risk, understand your symptoms, and get personalised, evidence-based recommendations.</div>
+            <div class="uc-badge badge-go">Full assessment available</div>
+          </div>
+        </div>
+        <div class="uc-card" onclick="pickUseCase('pregnancy',this)">
+          <div class="uc-icon">🤰</div>
+          <div class="uc-body">
+            <div class="uc-title">Pregnancy Care</div>
+            <div class="uc-sub">Track your pregnancy, monitor your baby's growth, and get guidance for every trimester.</div>
+            <div class="uc-badge badge-soon">Coming soon</div>
+          </div>
+        </div>
+        <div class="uc-card" onclick="pickUseCase('period',this)">
+          <div class="uc-icon">🗓️</div>
+          <div class="uc-body">
+            <div class="uc-title">Period and Cycle Wellness</div>
+            <div class="uc-sub">Track your cycle, understand your hormonal health, and manage period symptoms.</div>
+            <div class="uc-badge badge-soon">Coming soon</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-nav"><div></div><button class="btn-next" id="btn0" onclick="goTo(1)" disabled>Continue →</button></div>
+    </div>
+
+    <!-- STEP 1: About you -->
+    <div class="step" id="step-1">
+      <div class="step-tag">Section 1 of 7 — About you</div>
+      <div class="step-title">Let's start with<br><em>the basics</em></div>
+      <div class="step-sub">These measurements let us calculate important risk markers including BMI and waist-to-hip ratio automatically.</div>
+
+      <div class="q-group">
+        <div class="q-label">How old are you?</div>
+        <div class="inp-wrap" style="max-width:200px;">
+          <input type="number" class="q-inp" id="age" placeholder="25" min="1" max="99" oninput="calcMetrics()">
+          <span class="inp-unit">years</span>
+        </div>
+        <div class="alert-box alert-warn" id="age-warn" style="display:none;">
+          <div class="alert-title">Outside standard range</div>
+          <p>This assessment is optimised for ages 18–40. Under 18 requires an adolescent protocol; over 40 requires perimenopausal considerations.</p>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Height and weight</div>
+        <div class="input-row">
+          <div class="input-group">
+            <div class="input-lbl">Height</div>
+            <div class="inp-wrap"><input type="number" class="q-inp" id="height" placeholder="160" oninput="calcMetrics()"><span class="inp-unit">cm</span></div>
+          </div>
+          <div class="input-group">
+            <div class="input-lbl">Weight</div>
+            <div class="inp-wrap"><input type="number" class="q-inp" id="weight" placeholder="60" oninput="calcMetrics()"><span class="inp-unit">kg</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Waist and hip circumference <span style="font-weight:300;color:var(--ink-muted);">(optional)</span></div>
+        <div class="q-hint">Helps assess central adiposity — a key PCOS and cardiovascular risk marker</div>
+        <div class="input-row">
+          <div class="input-group">
+            <div class="input-lbl">Waist circumference</div>
+            <div class="inp-wrap"><input type="number" class="q-inp" id="waist" placeholder="75" oninput="calcMetrics()"><span class="inp-unit">cm</span></div>
+          </div>
+          <div class="input-group">
+            <div class="input-lbl">Hip circumference</div>
+            <div class="inp-wrap"><input type="number" class="q-inp" id="hip" placeholder="95" oninput="calcMetrics()"><span class="inp-unit">cm</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-row" id="calc-row" style="display:none;">
+        <div class="calc-box"><div class="calc-lbl">BMI</div><div class="calc-val" id="bmi-disp">—</div><div class="calc-interp" id="bmi-interp"></div></div>
+        <div class="calc-box" id="whr-box" style="display:none;"><div class="calc-lbl">Waist-to-Hip Ratio</div><div class="calc-val" id="whr-disp">—</div><div class="calc-interp" id="whr-interp"></div></div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(0)">← Back</button>
+        <button class="btn-next" onclick="goTo(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Menstrual cycle -->
+    <div class="step" id="step-2">
+      <div class="step-tag">Section 2 of 7 — Your cycle</div>
+      <div class="step-title">Your menstrual<br><em>cycle</em></div>
+      <div class="step-sub">Irregular or infrequent cycles are Rotterdam Criterion 1 for PCOS. Answer based on what is typical for you over the past 12 months.</div>
+
+      <div class="q-group">
+        <div class="q-label">How long is your typical menstrual cycle (day 1 of one period to day 1 of the next)?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('cycle_length','short',this)"><span class="opt-dot"></span>Less than 21 days</button>
+          <button class="opt" onclick="pick('cycle_length','regular',this)"><span class="opt-dot"></span>21 to 35 days (regular)</button>
+          <button class="opt" onclick="pick('cycle_length','slightly_irreg',this)"><span class="opt-dot"></span>36 to 45 days (slightly irregular)</button>
+          <button class="opt" onclick="pick('cycle_length','irreg',this)"><span class="opt-dot"></span>More than 45 days (irregular)</button>
+          <button class="opt" onclick="pick('cycle_length','amenorrhea',this)"><span class="opt-dot"></span>More than 90 days, or no period for 3 or more months</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">How many menstrual cycles do you have per year?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('cycles_per_year','normal',this)"><span class="opt-dot"></span>9 or more (normal)</button>
+          <button class="opt" onclick="pick('cycles_per_year','low',this)"><span class="opt-dot"></span>5 to 8 cycles per year</button>
+          <button class="opt" onclick="pick('cycles_per_year','very_low',this)"><span class="opt-dot"></span>Fewer than 5 cycles per year</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Do you experience mid-cycle signs suggesting ovulation? (mild pelvic pain, egg-white cervical mucus, slight temperature rise)</div>
+        <div class="options">
+          <button class="opt" onclick="pick('ovulation_signs','yes',this)"><span class="opt-dot"></span>Yes, regularly</button>
+          <button class="opt" onclick="pick('ovulation_signs','sometimes',this)"><span class="opt-dot"></span>Sometimes</button>
+          <button class="opt" onclick="pick('ovulation_signs','no',this)"><span class="opt-dot"></span>Rarely or never</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">When did irregular cycles begin?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('irreg_onset','always',this)"><span class="opt-dot"></span>Always irregular since my first period</button>
+          <button class="opt" onclick="pick('irreg_onset','gradual',this)"><span class="opt-dot"></span>Gradually worsened over months or years</button>
+          <button class="opt" onclick="pick('irreg_onset','sudden',this)"><span class="opt-dot"></span>Sudden onset within weeks or months</button>
+          <button class="opt" onclick="pick('irreg_onset','regular',this)"><span class="opt-dot"></span>My cycles are regular</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Have you ever had a gap of more than 90 days between periods, outside of pregnancy?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('period_absent_90','yes',this)"><span class="opt-dot"></span>Yes</button>
+          <button class="opt" onclick="pick('period_absent_90','no',this)"><span class="opt-dot"></span>No</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Have you been told by a doctor that you are not ovulating (anovulation)?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('anovulation_confirmed','yes',this)"><span class="opt-dot"></span>Yes, confirmed by a doctor</button>
+          <button class="opt" onclick="pick('anovulation_confirmed','suspected',this)"><span class="opt-dot"></span>Suspected but not confirmed</button>
+          <button class="opt" onclick="pick('anovulation_confirmed','no',this)"><span class="opt-dot"></span>No or unknown</button>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(1)">← Back</button>
+        <button class="btn-next" onclick="goTo(3)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Hair -->
+    <div class="step" id="step-3">
+      <div class="step-tag">Section 3 of 7 — Hair and skin</div>
+      <div class="step-title">Hair growth<br>& <em>skin</em></div>
+      <div class="step-sub">Excess terminal hair (hirsutism) is a core clinical sign of hyperandrogenism — Rotterdam Criterion 2. Rate each site using the Modified Ferriman-Gallwey scale.</div>
+
+      <div class="q-group">
+        <div class="q-label">Modified Ferriman-Gallwey (mFG) Score — rate each body site</div>
+        <div class="q-hint">0 = no terminal hair &nbsp;|&nbsp; 1 = a few hairs &nbsp;|&nbsp; 2 = partial coverage &nbsp;|&nbsp; 3 = moderate coverage &nbsp;|&nbsp; 4 = complete / frank hirsutism</div>
+        <div class="mfg-wrap">
+          <div class="mfg-head">
+            <div class="mfg-head-lbl">Body site</div>
+            <div class="mfg-head-n">0</div><div class="mfg-head-n">1</div><div class="mfg-head-n">2</div><div class="mfg-head-n">3</div><div class="mfg-head-n">4</div>
+          </div>
+          <div id="mfg-rows"></div>
+          <div class="mfg-footer">
+            <div><div class="mfg-footer-lbl">Total mFG Score</div><div class="mfg-footer-sub" id="mfg-interp">Select scores above</div></div>
+            <div class="mfg-footer-val" id="mfg-total">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Do you regularly remove facial or body hair (waxing, threading, shaving, laser)?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('hair_removal','none',this)"><span class="opt-dot"></span>No</button>
+          <button class="opt" onclick="pick('hair_removal','face',this)"><span class="opt-dot"></span>Yes — face only</button>
+          <button class="opt" onclick="pick('hair_removal','body',this)"><span class="opt-dot"></span>Yes — body only</button>
+          <button class="opt" onclick="pick('hair_removal','both',this)"><span class="opt-dot"></span>Yes — both face and body (may underestimate true score)</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Facial and chin hair character</div>
+        <div class="options">
+          <button class="opt" onclick="pick('facial_hair','none',this)"><span class="opt-dot"></span>None</button>
+          <button class="opt" onclick="pick('facial_hair','fine',this)"><span class="opt-dot"></span>Fine or vellus only — light, thin, not terminal</button>
+          <button class="opt" onclick="pick('facial_hair','few',this)"><span class="opt-dot"></span>A few terminal hairs — 1 to 5 dark, coarse hairs</button>
+          <button class="opt" onclick="pick('facial_hair','noticeable',this)"><span class="opt-dot"></span>Noticeable terminal hair growth</button>
+          <button class="opt" onclick="pick('facial_hair','heavy',this)"><span class="opt-dot"></span>Heavy or coarse — frank hirsutism</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Body hair locations (select all that apply)</div>
+        <div class="chips" id="body-hair-chips">
+          <div class="chip" onclick="toggleBodyHair('none',this)">None beyond normal</div>
+          <div class="chip" onclick="toggleBodyHair('abdomen',this)">Abdomen (midline)</div>
+          <div class="chip" onclick="toggleBodyHair('chest',this)">Chest or nipples</div>
+          <div class="chip" onclick="toggleBodyHair('upper_back',this)">Upper back</div>
+          <div class="chip" onclick="toggleBodyHair('lower_back',this)">Lower back</div>
+          <div class="chip" onclick="toggleBodyHair('upper_arms',this)">Upper arms</div>
+          <div class="chip" onclick="toggleBodyHair('inner_thighs',this)">Inner thighs</div>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(2)">← Back</button>
+        <button class="btn-next" onclick="goTo(4)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Acne and alopecia -->
+    <div class="step" id="step-4">
+      <div class="step-tag">Section 4 of 7 — Acne and hair loss</div>
+      <div class="step-title">Acne, hair loss<br>& <em>scalp</em></div>
+      <div class="step-sub">Androgenic acne (jawline pattern) and crown-specific hair thinning are additional clinical signs of hyperandrogenism.</div>
+
+      <div class="q-group">
+        <div class="q-label">How would you describe your acne?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('acne_frequency','none',this)"><span class="opt-dot"></span>None</button>
+          <button class="opt" onclick="pick('acne_frequency','occasional',this)"><span class="opt-dot"></span>Occasional — fewer than 5 spots at a time</button>
+          <button class="opt" onclick="pick('acne_frequency','persistent',this)"><span class="opt-dot"></span>Persistent — always present, waxes and wanes</button>
+          <button class="opt" onclick="pick('acne_frequency','severe',this)"><span class="opt-dot"></span>Severe or cystic — deep, painful nodules</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Where does your acne mainly appear?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('acne_location','none',this)"><span class="opt-dot"></span>No acne</button>
+          <button class="opt" onclick="pick('acne_location','forehead',this)"><span class="opt-dot"></span>Forehead or T-zone (non-androgenic pattern)</button>
+          <button class="opt" onclick="pick('acne_location','jawline',this)"><span class="opt-dot"></span>Jawline and chin (androgenic pattern)</button>
+          <button class="opt" onclick="pick('acne_location','jawline_other',this)"><span class="opt-dot"></span>Jawline combined with other areas</button>
+          <button class="opt" onclick="pick('acne_location','body',this)"><span class="opt-dot"></span>Back and or chest</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Did your acne worsen or begin in adulthood — after age 25?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('adult_onset_acne','yes',this)"><span class="opt-dot"></span>Yes</button>
+          <button class="opt" onclick="pick('adult_onset_acne','no',this)"><span class="opt-dot"></span>No</button>
+          <button class="opt" onclick="pick('adult_onset_acne','na',this)"><span class="opt-dot"></span>Not applicable</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Hair thinning pattern (Ludwig Visual Scale)</div>
+        <div class="options">
+          <button class="opt" onclick="pick('ludwig_grade','0',this)"><span class="opt-dot"></span>No thinning</button>
+          <button class="opt" onclick="pick('ludwig_grade','1',this)"><span class="opt-dot"></span>Mild thinning at the crown or top of scalp only — Ludwig Grade I</button>
+          <button class="opt" onclick="pick('ludwig_grade','2',this)"><span class="opt-dot"></span>Moderate thinning at crown, widened parting visible — Ludwig Grade II</button>
+          <button class="opt" onclick="pick('ludwig_grade','3',this)"><span class="opt-dot"></span>Severe thinning, scalp clearly visible at crown — Ludwig Grade III</button>
+          <button class="opt" onclick="pick('hair_loss_pattern','temples',this)"><span class="opt-dot"></span>Temples only</button>
+          <button class="opt" onclick="pick('hair_loss_pattern','diffuse',this)"><span class="opt-dot"></span>Diffuse all over the scalp</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Oily skin</div>
+        <div class="options">
+          <button class="opt" onclick="pick('oily_skin','none',this)"><span class="opt-dot"></span>None or normal</button>
+          <button class="opt" onclick="pick('oily_skin','mild',this)"><span class="opt-dot"></span>Mild</button>
+          <button class="opt" onclick="pick('oily_skin','severe',this)"><span class="opt-dot"></span>Severe or persistent</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Oily scalp</div>
+        <div class="options">
+          <button class="opt" onclick="pick('oily_scalp','none',this)"><span class="opt-dot"></span>None or normal</button>
+          <button class="opt" onclick="pick('oily_scalp','mild',this)"><span class="opt-dot"></span>Mild</button>
+          <button class="opt" onclick="pick('oily_scalp','severe',this)"><span class="opt-dot"></span>Severe — greasy within hours of washing</button>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(3)">← Back</button>
+        <button class="btn-next" onclick="goTo(5)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Health history -->
+    <div class="step" id="step-5">
+      <div class="step-tag">Section 5 of 7 — Health history</div>
+      <div class="step-title">Your health<br><em>history</em></div>
+      <div class="step-sub">These questions help identify metabolic risk and any conditions that must be excluded before a PCOS assessment can be meaningful.</div>
+
+      <div class="q-group">
+        <div class="q-label">Skin findings — select any that apply</div>
+        <div class="options">
+          <button class="opt" onclick="pick('skin_findings','none',this)"><span class="opt-dot"></span>None</button>
+          <button class="opt" onclick="pick('skin_findings','acanthosis',this)"><span class="opt-dot"></span>Dark, velvety thickened skin on neck, armpits, or groin (Acanthosis nigricans)</button>
+          <button class="opt" onclick="pick('skin_findings','skin_tags',this)"><span class="opt-dot"></span>Skin tags on neck, armpits, or under breasts</button>
+          <button class="opt" onclick="pick('skin_findings','both',this)"><span class="opt-dot"></span>Both of the above</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Thyroid disorder</div>
+        <div class="options">
+          <button class="opt" onclick="pick('thyroid','none',this)"><span class="opt-dot"></span>No thyroid disorder</button>
+          <button class="opt" onclick="pick('thyroid','hypo',this)"><span class="opt-dot"></span>Hypothyroidism — underactive thyroid (diagnosed)</button>
+          <button class="opt" onclick="pick('thyroid','hyper',this)"><span class="opt-dot"></span>Hyperthyroidism — overactive thyroid (diagnosed)</button>
+          <button class="opt" onclick="pick('thyroid','other',this)"><span class="opt-dot"></span>Thyroid nodule or other thyroid condition</button>
+          <button class="opt" onclick="pick('thyroid','untested',this)"><span class="opt-dot"></span>Never been tested</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Blood glucose or diabetes status</div>
+        <div class="options">
+          <button class="opt" onclick="pick('diabetes','normal',this)"><span class="opt-dot"></span>Normal glucose, tested within 2 years</button>
+          <button class="opt" onclick="pick('diabetes','prediabetes',this)"><span class="opt-dot"></span>Prediabetes or impaired fasting glucose</button>
+          <button class="opt" onclick="pick('diabetes','t2dm',this)"><span class="opt-dot"></span>Type 2 diabetes (diagnosed)</button>
+          <button class="opt" onclick="pick('diabetes','gestational',this)"><span class="opt-dot"></span>Gestational diabetes in a prior pregnancy</button>
+          <button class="opt" onclick="pick('diabetes','untested',this)"><span class="opt-dot"></span>Never tested</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Lipid profile — if known</div>
+        <div class="options">
+          <button class="opt" onclick="pick('lipids','normal',this)"><span class="opt-dot"></span>Normal</button>
+          <button class="opt" onclick="pick('lipids','high_tg_low_hdl',this)"><span class="opt-dot"></span>High triglycerides or low HDL</button>
+          <button class="opt" onclick="pick('lipids','high_ldl',this)"><span class="opt-dot"></span>High LDL</button>
+          <button class="opt" onclick="pick('lipids','multiple',this)"><span class="opt-dot"></span>Multiple abnormalities</button>
+          <button class="opt" onclick="pick('lipids','unknown',this)"><span class="opt-dot"></span>Never tested or unknown</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Most recent blood pressure reading</div>
+        <div class="options">
+          <button class="opt" onclick="pick('bp','normal',this)"><span class="opt-dot"></span>Normal — below 130/80 mmHg</button>
+          <button class="opt" onclick="pick('bp','elevated',this)"><span class="opt-dot"></span>Elevated — 130 to 139 over 80 to 89 mmHg</button>
+          <button class="opt" onclick="pick('bp','high',this)"><span class="opt-dot"></span>High — 140/90 mmHg or above</button>
+          <button class="opt" onclick="pick('bp','unknown',this)"><span class="opt-dot"></span>Unknown or never checked</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Family history — mother, sister, or aunt</div>
+        <div class="options">
+          <button class="opt" onclick="pick('family_hx','none',this)"><span class="opt-dot"></span>None known</button>
+          <button class="opt" onclick="pick('family_hx','pcos',this)"><span class="opt-dot"></span>PCOS in mother or sister</button>
+          <button class="opt" onclick="pick('family_hx','diabetes',this)"><span class="opt-dot"></span>Type 2 diabetes or metabolic syndrome</button>
+          <button class="opt" onclick="pick('family_hx','cvd',this)"><span class="opt-dot"></span>Cardiovascular disease before age 60</button>
+          <button class="opt" onclick="pick('family_hx','multiple',this)"><span class="opt-dot"></span>Multiple of the above</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Prolactin or adrenal status — if tested</div>
+        <div class="options">
+          <button class="opt" onclick="pick('prolactin_status','normal',this)"><span class="opt-dot"></span>Normal</button>
+          <button class="opt" onclick="pick('prolactin_status','elevated',this)"><span class="opt-dot"></span>Elevated prolactin — hyperprolactinemia (diagnosed)</button>
+          <button class="opt" onclick="pick('prolactin_status','elevated_dheas',this)"><span class="opt-dot"></span>Elevated DHEAS or androstenedione</button>
+          <button class="opt" onclick="pick('prolactin_status','cah',this)"><span class="opt-dot"></span>Congenital adrenal hyperplasia — CAH (diagnosed)</button>
+          <button class="opt" onclick="pick('prolactin_status','untested',this)"><span class="opt-dot"></span>Never tested or unknown</button>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(4)">← Back</button>
+        <button class="btn-next" onclick="goTo(6)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: Lifestyle -->
+    <div class="step" id="step-6">
+      <div class="step-tag">Section 6 of 7 — Lifestyle</div>
+      <div class="step-title">Lifestyle &<br><em>wellbeing</em></div>
+      <div class="step-sub">Lifestyle factors significantly influence PCOS symptoms and are among the most modifiable risk contributors.</div>
+
+      <div class="q-group">
+        <div class="q-label">Physical activity level — weekly average</div>
+        <div class="options">
+          <button class="opt" onclick="pick('activity','sedentary',this)"><span class="opt-dot"></span>Sedentary — less than 30 minutes per week</button>
+          <button class="opt" onclick="pick('activity','light',this)"><span class="opt-dot"></span>Light — 30 to 90 minutes per week</button>
+          <button class="opt" onclick="pick('activity','moderate',this)"><span class="opt-dot"></span>Moderate — 90 to 150 minutes per week</button>
+          <button class="opt" onclick="pick('activity','active',this)"><span class="opt-dot"></span>Active — more than 150 minutes per week (meets WHO guideline)</button>
+          <button class="opt" onclick="pick('activity','very_active',this)"><span class="opt-dot"></span>Very active — more than 250 minutes per week</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Predominant dietary pattern</div>
+        <div class="options">
+          <button class="opt" onclick="pick('diet','high_gi',this)"><span class="opt-dot"></span>High GI — maida, white rice, sugary foods, processed snacks dominant</button>
+          <button class="opt" onclick="pick('diet','mixed',this)"><span class="opt-dot"></span>Mixed — combination of high and low GI foods</button>
+          <button class="opt" onclick="pick('diet','low_gi',this)"><span class="opt-dot"></span>Low GI — whole grains, legumes, vegetables dominant</button>
+          <button class="opt" onclick="pick('diet','vegetarian',this)"><span class="opt-dot"></span>Balanced vegetarian or vegan diet</button>
+          <button class="opt" onclick="pick('diet','high_protein',this)"><span class="opt-dot"></span>High protein or low carbohydrate</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Chronic stress level — self-assessed</div>
+        <div class="options">
+          <button class="opt" onclick="pick('stress','low',this)"><span class="opt-dot"></span>Low — generally manageable</button>
+          <button class="opt" onclick="pick('stress','moderate',this)"><span class="opt-dot"></span>Moderate — frequent stressors, mostly managed</button>
+          <button class="opt" onclick="pick('stress','high',this)"><span class="opt-dot"></span>High — significant ongoing stress</button>
+          <button class="opt" onclick="pick('stress','chronic',this)"><span class="opt-dot"></span>Chronic or burnout — persistent, overwhelming stress</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">How are you feeling emotionally overall?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('mental_health','none',this)"><span class="opt-dot"></span>Generally well — no significant concerns</button>
+          <button class="opt" onclick="pick('mental_health','mild',this)"><span class="opt-dot"></span>Mild — occasional low mood or worry, manageable</button>
+          <button class="opt" onclick="pick('mental_health','moderate',this)"><span class="opt-dot"></span>Moderate — affecting daily life somewhat</button>
+          <button class="opt" onclick="pick('mental_health','severe',this)"><span class="opt-dot"></span>Significant impact on daily functioning</button>
+          <button class="opt" onclick="pick('mental_health','diagnosed',this)"><span class="opt-dot"></span>Diagnosed anxiety or depressive disorder</button>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(5)">← Back</button>
+        <button class="btn-next" onclick="goTo(7)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 7: Reproductive -->
+    <div class="step" id="step-7">
+      <div class="step-tag">Section 7 of 7 — Reproductive health</div>
+      <div class="step-title">Reproductive<br><em>health</em></div>
+      <div class="step-sub">Almost there. These final questions complete your risk profile and help us generate the most accurate recommendations.</div>
+
+      <div class="q-group">
+        <div class="q-label">Current fertility intent</div>
+        <div class="options">
+          <button class="opt" onclick="pick('fertility','not_trying',this)"><span class="opt-dot"></span>Not currently trying to conceive</button>
+          <button class="opt" onclick="pick('fertility','trying_ok',this)"><span class="opt-dot"></span>Trying to conceive — succeeding normally</button>
+          <button class="opt" onclick="pick('fertility','trying_failed',this)"><span class="opt-dot"></span>Trying for 6 or more months without success</button>
+          <button class="opt" onclick="pick('fertility','anovulatory',this)"><span class="opt-dot"></span>Confirmed anovulatory infertility</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Prior pregnancies</div>
+        <div class="options">
+          <button class="opt" onclick="pick('prior_pregnancies','none',this)"><span class="opt-dot"></span>None</button>
+          <button class="opt" onclick="pick('prior_pregnancies','successful',this)"><span class="opt-dot"></span>One or more successful pregnancies</button>
+          <button class="opt" onclick="pick('prior_pregnancies','miscarriage',this)"><span class="opt-dot"></span>One or more miscarriages</button>
+          <button class="opt" onclick="pick('prior_pregnancies','recurrent_miscarriage',this)"><span class="opt-dot"></span>Recurrent miscarriage — 2 or more</button>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-label">Are you currently using or recently stopped hormonal contraception?</div>
+        <div class="options">
+          <button class="opt" onclick="pick('hormonal_contraception','none',this)"><span class="opt-dot"></span>No — not using and have not recently used</button>
+          <button class="opt" onclick="pick('hormonal_contraception','current',this)"><span class="opt-dot"></span>Yes — currently using (pill, implant, injection, or hormonal IUD)</button>
+          <button class="opt" onclick="pick('hormonal_contraception','stopped_3mo',this)"><span class="opt-dot"></span>Stopped within the last 3 months</button>
+          <button class="opt" onclick="pick('hormonal_contraception','stopped_older',this)"><span class="opt-dot"></span>Stopped more than 3 months ago</button>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="goTo(6)">← Back</button>
+        <button class="btn-next btn-submit" onclick="submit()">See my results →</button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results" id="results"></div>
+
+  </div>
+</div>
+
+<script>
+const A = {};
+const bodyHairSet = new Set();
+let cur = 0;
+const TOTAL = 7;
+
+const MFG_SITES = [
+  {key:'upper_lip',label:'Upper lip'},{key:'chin',label:'Chin'},{key:'chest',label:'Chest'},
+  {key:'upper_abdomen',label:'Upper abdomen'},{key:'lower_abdomen',label:'Lower abdomen'},
+  {key:'upper_arm',label:'Upper arm'},{key:'thigh',label:'Thigh'},
+  {key:'upper_back',label:'Upper back'},{key:'lower_back',label:'Lower back'}
+];
+MFG_SITES.forEach(s => A[s.key] = 0);
+
+function init() {
+  buildMFG();
+  updateProgress();
+}
+
+function buildMFG() {
+  document.getElementById('mfg-rows').innerHTML = MFG_SITES.map(s => `
+    <div class="mfg-row" id="mfgr-${s.key}">
+      <div class="mfg-site-name">${s.label}</div>
+      ${[0,1,2,3,4].map(n=>`<div class="mfg-cell"><div class="mfg-dot${n===0?' sel':''}" id="mfg-${s.key}-${n}" onclick="setMFG('${s.key}',${n},this)"></div></div>`).join('')}
+    </div>`).join('');
+}
+
+function goTo(n) {
+  if(n < 0 || n > TOTAL) return;
+  document.getElementById('step-'+cur).classList.remove('active');
+  cur = n;
+  document.getElementById('step-'+cur).classList.add('active');
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress() {
+  const pct = cur === 0 ? 0 : Math.round((cur/TOTAL)*100);
+  document.getElementById('prog').style.width = pct+'%';
+  document.getElementById('step-label').textContent = cur === 0 ? 'PCOS Risk Assessment' : 'Step '+cur+' of '+TOTAL;
+}
+
+function pickUseCase(type, el) {
+  document.querySelectorAll('.uc-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  A.use_case = type;
+  const btn = document.getElementById('btn0');
+  if(type !== 'pcos') {
+    btn.disabled = true;
+    btn.textContent = 'Coming soon';
+    setTimeout(()=>{ el.classList.remove('sel'); A.use_case=null; btn.disabled=true; btn.textContent='Continue →'; },1400);
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Continue →';
+  }
+}
+
+function pick(key, val, el) {
+  const container = el.closest('.options');
+  if(container) container.querySelectorAll('.opt').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  A[key] = val;
+  if(key==='ludwig_grade') A.hair_loss_pattern=null;
+  if(key==='hair_loss_pattern') A.ludwig_grade=null;
+}
+
+function toggleBodyHair(val, el) {
+  el.classList.toggle('sel');
+  el.classList.contains('sel') ? bodyHairSet.add(val) : bodyHairSet.delete(val);
+  if(bodyHairSet.has('chest')||bodyHairSet.has('upper_back')||bodyHairSet.has('lower_back')) A.body_hair='chest_back';
+  else if(bodyHairSet.size>1) A.body_hair='multiple';
+  else if(bodyHairSet.has('abdomen')) A.body_hair='abdomen';
+  else A.body_hair='none';
+}
+
+function setMFG(site, val, el) {
+  document.querySelectorAll(`#mfgr-${site} .mfg-dot`).forEach(d=>d.classList.remove('sel'));
+  el.classList.add('sel');
+  A[site] = val;
+  refreshMFGTotal();
+}
+
+function refreshMFGTotal() {
+  const t = MFG_SITES.reduce((s,x)=>s+(parseInt(A[x.key])||0),0);
+  document.getElementById('mfg-total').textContent = t;
+  let i='';
+  if(t===0) i='No hirsutism detected';
+  else if(t<4) i='Below South Asian cutoff (≥4 required)';
+  else if(t<8) i='Mild-moderate hirsutism — South Asian cutoff met (≥4)';
+  else i='Severe hirsutism';
+  document.getElementById('mfg-interp').textContent=i;
+}
+
+function calcMetrics() {
+  const h=parseFloat(document.getElementById('height').value);
+  const w=parseFloat(document.getElementById('weight').value);
+  const waist=parseFloat(document.getElementById('waist').value);
+  const hip=parseFloat(document.getElementById('hip').value);
+  const age=parseFloat(document.getElementById('age').value);
+  if(age){ A.age=age; document.getElementById('age-warn').style.display=(age<18||age>40)?'block':'none'; }
+  if(h) A.height=h; if(w) A.weight=w; if(waist) A.waist=waist; if(hip) A.hip=hip;
+  const cr=document.getElementById('calc-row');
+  if(h&&w){
+    const bmi=w/((h/100)**2); A.bmi_calc=bmi;
+    document.getElementById('bmi-disp').textContent=bmi.toFixed(1);
+    let bi='';
+    if(bmi<18.5) bi='Underweight';
+    else if(bmi<23) bi='Normal (South Asian range)';
+    else if(bmi<25) bi='Elevated risk (Asian cutoff ≥23)';
+    else if(bmi<30) bi='Overweight';
+    else bi='Obese';
+    document.getElementById('bmi-interp').textContent=bi;
+    cr.style.display='flex';
+  }
+  if(waist&&hip){
+    const whr=waist/hip; A.whr_calc=whr;
+    document.getElementById('whr-disp').textContent=whr.toFixed(2);
+    document.getElementById('whr-interp').textContent=whr>0.87?'Central adiposity present':'Within normal range';
+    document.getElementById('whr-box').style.display='block';
+  }
+}
+
+// ===== FULL SCORING ENGINE =====
+function score() {
+  const a = A;
+  const r = {
+    diffFlags:[], confFlags:[],
+    oligo:0, oligo_sig:[],
+    c1:'NEGATIVE', c1_conf:'',
+    mfg_total:0, mfg_sub:0, acne_sub:0, alop_sub:0, sup_sub:0,
+    ha_total:0, c2:'LIKELY_NEGATIVE', c2_conf:'', c2_sig:[],
+    c3:'UNKNOWN',
+    phenotype:'INDETERMINATE', pheno_desc:'', met_risk:'INDETERMINATE',
+    composite:0, risk_tier:'LOW',
+    clinFlags:[], inv:[],
+    bmi:a.bmi_calc||0, whr:a.whr_calc||null,
+    mfg_grade:'NONE', ludwig:0, mfg_under:false
+  };
+
+  // STAGE 1 — Differentials & confounders
+  if(a.thyroid==='hypo') r.diffFlags.push({sev:'CRITICAL',msg:'Hypothyroidism must be excluded as the primary cause',act:'TSH, fT3, fT4 required. Do not score PCOS risk until thyroid status is confirmed.'});
+  if(a.thyroid==='untested') r.diffFlags.push({sev:'HIGH',msg:'Thyroid status unknown — mandatory screening before PCOS workup',act:'Order TSH.'});
+  if(a.prolactin_status==='elevated') r.diffFlags.push({sev:'CRITICAL',msg:'Hyperprolactinemia — causes anovulation and must be excluded before PCOS diagnosis',act:'MRI pituitary required. Re-evaluate after treatment.'});
+  if(a.prolactin_status==='cah') r.diffFlags.push({sev:'CRITICAL',msg:'CAH diagnosed — primary exclusion criterion for PCOS',act:'PCOS diagnosis not applicable if CAH is confirmed.'});
+  if(a.hormonal_contraception==='current'||a.hormonal_contraception==='stopped_3mo') r.confFlags.push({sev:'HIGH',msg:'Hormonal contraception alters SHBG and gonadotrophin-dependent androgen production',act:'Biochemical androgen testing is not valid. Withhold until 3 months post-cessation.'});
+  if(a.irreg_onset==='sudden') r.diffFlags.push({sev:'MODERATE',msg:'Sudden-onset irregular cycles suggest non-PCOS pathology — thyroid, pituitary, or structural cause',act:'Broaden differential before assuming PCOS.'});
+
+  // STAGE 2 — Rotterdam C1: Oligo/anovulation
+  let ol=0, os=[];
+  if(a.cycle_length==='irreg'){ol+=40;os.push('Cycle length >45 days');}
+  if(a.cycle_length==='amenorrhea'){ol+=40;os.push('Amenorrhea — >90 days');}
+  if(a.cycle_length==='slightly_irreg'){ol+=15;os.push('Slightly irregular cycle 36–45 days');}
+  if(a.cycles_per_year==='very_low'){ol+=40;os.push('Fewer than 5 cycles per year');}
+  else if(a.cycles_per_year==='low'){ol+=25;os.push('5–8 cycles per year — below 8-cycle threshold');}
+  if(a.anovulation_confirmed==='yes'){ol+=50;os.push('Clinician-confirmed anovulation');}
+  if(a.period_absent_90==='yes'){ol+=40;os.push('Single cycle >90 days reported');}
+  if(a.ovulation_signs==='no'){ol+=15;os.push('No mid-cycle ovulatory symptoms');}
+  else if(a.ovulation_signs==='sometimes') ol+=7;
+  if(a.irreg_onset==='always'){ol+=10;os.push('Irregular since menarche');}
+  r.oligo=ol; r.oligo_sig=os;
+  if(ol>=40){r.c1='POSITIVE';r.c1_conf=ol>=60?'HIGH':'MODERATE';}
+  else if(ol>=20){r.c1='UNCERTAIN';r.c1_conf='LOW';}
+
+  // STAGE 3 — Rotterdam C2: Hyperandrogenism
+  let mfg_t=MFG_SITES.reduce((s,x)=>s+(parseInt(a[x.key])||0),0);
+  r.mfg_total=mfg_t;
+  let ms=0;
+  if(mfg_t>=8){ms=40;r.mfg_grade='SEVERE';}
+  else if(mfg_t>=4){ms=25;r.mfg_grade='MILD_MODERATE';}
+  else if(mfg_t>=2){ms=10;r.mfg_grade='BORDERLINE';}
+  if(a.hair_removal==='face'||a.hair_removal==='body'||a.hair_removal==='both'){ms=Math.min(ms+10,40);r.mfg_under=true;}
+  r.mfg_sub=ms;
+  if(mfg_t>=4) r.c2_sig.push('mFG score '+mfg_t+' — '+r.mfg_grade.toLowerCase().replace('_',' '));
+
+  let as=0;
+  if(a.acne_location==='jawline'||a.acne_location==='jawline_other'){as+=20;r.c2_sig.push('Androgenic acne — jawline/chin pattern');if(a.acne_frequency==='severe')as+=10;}
+  else if(a.acne_location==='body') as+=10;
+  else if(a.acne_location==='forehead') as+=5;
+  if(a.adult_onset_acne==='yes'){as+=8;r.c2_sig.push('Adult-onset acne after age 25');}
+  r.acne_sub=as;
+
+  let lu=parseInt(a.ludwig_grade)||0; r.ludwig=lu;
+  let alps=0;
+  if(lu===3) alps=25; else if(lu===2) alps=18; else if(lu===1) alps=10;
+  if(a.hair_loss_pattern==='diffuse') alps=Math.max(0,alps-8);
+  else if(a.hair_loss_pattern==='temples') alps=Math.max(0,alps-5);
+  if(lu>=1) r.c2_sig.push('Ludwig Grade '+lu+' androgenic alopecia');
+  r.alop_sub=alps;
+
+  let ss=0;
+  if(a.facial_hair==='heavy'){ss+=15;r.c2_sig.push('Heavy facial terminal hair');}
+  else if(a.facial_hair==='noticeable'){ss+=10;r.c2_sig.push('Noticeable terminal facial hair');}
+  else if(a.facial_hair==='few') ss+=4;
+  if(a.body_hair==='chest_back'||a.body_hair==='multiple'){ss+=12;r.c2_sig.push('Body hair on chest/back');}
+  else if(a.body_hair==='abdomen') ss+=6;
+  if(a.oily_skin==='severe') ss+=5; else if(a.oily_skin==='mild') ss+=2;
+  if(a.oily_scalp==='severe') ss+=4;
+  r.sup_sub=ss;
+
+  r.ha_total=ms+as+alps+ss;
+  if(r.ha_total>=30){r.c2='LIKELY_POSITIVE';r.c2_conf=r.ha_total>=50?'HIGH':'MODERATE';}
+  else if(r.ha_total>=15){r.c2='POSSIBLE';r.c2_conf='LOW';}
+
+  // STAGE 5 — Phenotype
+  if(r.c1==='POSITIVE'&&r.c2==='LIKELY_POSITIVE'){r.phenotype='A_or_B';r.met_risk='HIGH';r.pheno_desc='Phenotype A or B likely — both criteria 1 and 2 are met. Ultrasound result determines A vs B.';}
+  else if(r.c1==='POSITIVE'){r.phenotype='D_possible';r.met_risk='MODERATE';r.pheno_desc='Phenotype D possible if PCOM is confirmed on ultrasound. Biochemical HA testing still required to rule out Phenotype B.';}
+  else if(r.c2==='LIKELY_POSITIVE'){r.phenotype='C_possible';r.met_risk='MODERATE';r.pheno_desc='Phenotype C possible if PCOM is confirmed on ultrasound. Single-criterion finding only at this stage.';}
+  else{r.pheno_desc='Insufficient evidence for phenotype classification — clinical investigation required.';}
+
+  // STAGE 6 — Composite score 0–100
+  let c=0;
+  if(r.c1==='POSITIVE') c+=30; else if(r.c1==='UNCERTAIN') c+=15;
+  if(r.c2==='LIKELY_POSITIVE') c+=25; else if(r.c2==='POSSIBLE') c+=12;
+  if(r.bmi>=30) c+=10; else if(r.bmi>=25) c+=6; else if(r.bmi>=23) c+=3;
+  if(r.whr){if(r.whr>0.87) c+=5; else if(r.whr>0.80) c+=2;}
+  if(a.skin_findings==='acanthosis'||a.skin_findings==='both') c+=7;
+  if(a.diabetes==='t2dm') c+=5; else if(a.diabetes==='prediabetes') c+=3; else if(a.diabetes==='gestational') c+=2;
+  if(a.lipids==='multiple'||a.lipids==='high_tg_low_hdl') c+=3;
+  if(a.bp==='high') c+=3; else if(a.bp==='elevated') c+=1;
+  if(a.family_hx==='multiple') c+=8; else if(a.family_hx==='pcos') c+=6; else if(a.family_hx==='diabetes') c+=3; else if(a.family_hx==='cvd') c+=2;
+  let lm=0;
+  if(a.activity==='sedentary') lm+=3; else if(a.activity==='light') lm+=1; else if(a.activity==='very_active') lm-=2;
+  if(a.diet==='high_gi') lm+=2; else if(a.diet==='low_gi') lm-=1;
+  if(a.stress==='chronic') lm+=2; else if(a.stress==='high') lm+=1;
+  c+=Math.max(0,Math.min(7,lm));
+  c=Math.min(100,c);
+  r.composite=Math.round(c);
+  if(c>=60) r.risk_tier='HIGH'; else if(c>=35) r.risk_tier='MODERATE';
+
+  // STAGE 7 — Clinical flags
+  const f=[];
+  if(a.thyroid==='hypo'||a.prolactin_status==='elevated'||a.prolactin_status==='cah') f.push({p:1,cat:'Differential Diagnosis',msg:'A differential diagnosis must be excluded before PCOS can be confirmed.',act:'See differential flags above. Do not label as PCOS until resolved.'});
+  if(a.diabetes==='t2dm') f.push({p:2,cat:'Metabolic',msg:'Type 2 diabetes identified.',act:'OGTT, HbA1c, fasting glucose — metabolic management needed urgently.'});
+  if(a.bp==='high') f.push({p:2,cat:'Cardiovascular',msg:'Blood pressure ≥140/90 mmHg.',act:'Annual monitoring minimum. CVD risk assessment required.'});
+  if(a.skin_findings==='acanthosis'||a.skin_findings==='both') f.push({p:2,cat:'Insulin Resistance',msg:'Acanthosis nigricans — strong clinical marker of insulin resistance.',act:'Fasting insulin and HOMA-IR recommended.'});
+  if(a.fertility==='anovulatory'||(a.fertility==='trying_failed'&&r.c1==='POSITIVE')) f.push({p:2,cat:'Fertility',msg:'Anovulatory infertility suspected.',act:'Letrozole is first-line per guideline. Refer to reproductive endocrinology.'});
+  if(a.mental_health==='severe'||a.mental_health==='diagnosed') f.push({p:2,cat:'Mental Health',msg:'Significant psychological symptoms reported.',act:'Refer to mental health professional. Avoid antidepressants that cause weight gain.'});
+  if(a.diabetes==='prediabetes'||a.diabetes==='untested') f.push({p:3,cat:'Metabolic Screening',msg:a.diabetes==='prediabetes'?'Prediabetes identified.':'Blood glucose status unknown.',act:'OGTT at baseline. Repeat every 1–3 years depending on risk.'});
+  if(a.thyroid==='untested') f.push({p:3,cat:'Thyroid Screening',msg:'Thyroid status never tested.',act:'TSH screening is mandatory.'});
+  if(r.mfg_under) f.push({p:3,cat:'Hirsutism',msg:'mFG score likely underestimated due to regular hair removal.',act:'Clinical re-assessment of terminal hair sites after 3–4 weeks without removal.'});
+  if(a.hormonal_contraception==='current'||a.hormonal_contraception==='stopped_3mo') f.push({p:3,cat:'Confounder',msg:'Hormonal contraception active or recently stopped.',act:'Biochemical androgen testing not valid. Reassess 3 months after stopping.'});
+  if(r.bmi>=23) f.push({p:3,cat:'Weight Management',msg:'BMI '+r.bmi.toFixed(1)+' — above South Asian elevated-risk cutoff of 23 kg/m².',act:'Lifestyle intervention is first-line. 5–10% weight loss yields significant clinical improvement per guideline.'});
+  if(r.whr&&r.whr>0.87) f.push({p:3,cat:'Central Adiposity',msg:'WHR '+r.whr.toFixed(2)+' — central adiposity present.',act:'Waist circumference target is <80 cm for South Asian women.'});
+  if(a.family_hx==='pcos'||a.family_hx==='multiple') f.push({p:3,cat:'Family History',msg:'First-degree relative with PCOS identified.',act:'Lower threshold for full clinical investigation.'});
+  if(a.prior_pregnancies==='recurrent_miscarriage') f.push({p:3,cat:'Reproductive',msg:'Recurrent pregnancy loss reported — PCOS is associated.',act:'Refer for dedicated recurrent miscarriage workup.'});
+  if(a.diet==='high_gi') f.push({p:4,cat:'Nutrition',msg:'High GI dietary pattern identified.',act:'Replace maida/white rice with ragi, jowar, whole wheat, brown rice. Low GI diet reduces insulin resistance.'});
+  if(a.activity==='sedentary') f.push({p:4,cat:'Physical Activity',msg:'Sedentary lifestyle identified.',act:'Target: 150 min/week moderate activity. Start with 10-minute bouts and increase 5% weekly.'});
+  if(a.stress==='chronic'||a.stress==='high') f.push({p:4,cat:'Stress Management',msg:'High or chronic stress levels reported.',act:'Chronic stress activates the HPA axis and may worsen androgen excess. Psychological support and CBT recommended.'});
+  r.clinFlags=f;
+
+  // Investigations
+  r.inv=['Free testosterone — LCMS or extraction immunoassay preferred. Direct RIA/ELISA assays are unreliable and should not be used.','FAI (free androgen index) or calculated free testosterone','Pelvic ultrasound (transvaginal preferred) — follicle number per ovary ≥20 or ovarian volume ≥10 ml'];
+  if(a.thyroid==='untested'||a.thyroid==='hypo') r.inv.push('TSH — mandatory before PCOS workup');
+  r.inv.push('OGTT 75g or HbA1c — baseline metabolic screening');
+  if(r.bmi>=25) r.inv.push('Fasting lipid profile');
+  if(r.c1==='UNCERTAIN') r.inv.push('Mid-luteal serum progesterone (day 21) to confirm ovulation status');
+  if(a.prolactin_status==='untested') r.inv.push('Serum prolactin — to exclude hyperprolactinemia');
+
+  return r;
+}
+
+function submit() {
+  const res = score();
+  renderResults(res);
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('results').classList.add('active');
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('step-label').textContent='Your Results';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderResults(r) {
+  const tc = r.risk_tier.toLowerCase();
+  const col={HIGH:'var(--red)',MODERATE:'var(--gold)',LOW:'var(--sage)'}[r.risk_tier];
+  const radius=62,circ=2*Math.PI*radius,offset=circ-(r.composite/100)*circ;
+  const c1lbl={POSITIVE:'Likely present',UNCERTAIN:'Uncertain',NEGATIVE:'Not indicated'}[r.c1];
+  const c2lbl={LIKELY_POSITIVE:'Likely present',POSSIBLE:'Possible',LIKELY_NEGATIVE:'Not indicated'}[r.c2];
+  const c1cls={POSITIVE:'cb-pos',UNCERTAIN:'cb-unc',NEGATIVE:'cb-neg'}[r.c1];
+  const c2cls={LIKELY_POSITIVE:'cb-pos',POSSIBLE:'cb-unc',LIKELY_NEGATIVE:'cb-neg'}[r.c2];
+  const tierDesc={HIGH:'Your responses indicate a high probability of PCOS-related pathology. Urgent referral to a gynaecologist or endocrinologist is recommended.',MODERATE:'Your responses suggest a moderate likelihood of PCOS features. Clinical investigation is recommended to confirm or rule out a diagnosis.',LOW:'Your responses show limited markers associated with PCOS at this time. Continue monitoring if symptoms develop or change.'};
+
+  const flagHtml=(flags,cls,dotcls)=>flags.map(f=>`<div class="flag ${cls}"><div class="flag-dot ${dotcls}"></div><div><div class="flag-cat">${f.cat}</div><div class="flag-msg">${f.msg}</div><div class="flag-action">${f.act}</div></div></div>`).join('');
+
+  const sigs=(arr)=>arr.length?`<div class="sig-list">${arr.map(s=>`<span class="sig-chip">${s}</span>`).join('')}</div>`:'';
+
+  const p1=r.clinFlags.filter(f=>f.p===1),p2=r.clinFlags.filter(f=>f.p===2),p3=r.clinFlags.filter(f=>f.p===3),p4=r.clinFlags.filter(f=>f.p===4);
+
+  document.getElementById('results').innerHTML=`
+    <div class="risk-hero ${tc}">
+      <div class="risk-tag">PCOS Risk Assessment Result</div>
+      <div class="risk-tier-label">${r.risk_tier} RISK</div>
+      <div class="gauge-wrap">
+        <div class="gauge-container">
+          <svg class="gauge-svg" width="150" height="150" viewBox="0 0 150 150">
+            <circle class="g-bg" cx="75" cy="75" r="${radius}"/>
+            <circle class="g-fill ${tc}" cx="75" cy="75" r="${radius}" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${circ.toFixed(1)}" id="g-circle"/>
+          </svg>
+          <div class="gauge-center"><div class="gauge-num" id="g-num">0</div><div class="gauge-den">out of 100</div></div>
+        </div>
+      </div>
+      <div class="risk-desc">${tierDesc[r.risk_tier]}</div>
+    </div>
+
+    ${r.diffFlags.length?`<div class="res-sec"><div class="res-sec-title">Critical — Differential Diagnoses to Resolve First</div>${r.diffFlags.map(f=>`<div class="flag f1"><div class="flag-dot"></div><div><div class="flag-cat">${f.sev}</div><div class="flag-msg">${f.msg}</div><div class="flag-action">${f.act}</div></div></div>`).join('')}</div>`:''}
+
+    ${r.confFlags.length?`<div class="flag f2" style="margin-bottom:1.5rem;"><div class="flag-dot"></div><div><div class="flag-cat">Confounder Detected</div><div class="flag-msg">${r.confFlags[0].msg}</div><div class="flag-action">${r.confFlags[0].act}</div></div></div>`:''}
+
+    <div class="res-sec">
+      <div class="res-sec-title">Rotterdam Criteria — Self-Report Proxy</div>
+      <div class="crit-grid">
+        <div class="crit-card"><div class="crit-emoji">🔄</div><div class="crit-name">Criterion 1<br>Oligo / Anovulation</div><div class="crit-badge ${c1cls}">${c1lbl}</div><div class="crit-conf">${r.c1_conf?r.c1_conf+' confidence':''}</div>${sigs(r.oligo_sig)}</div>
+        <div class="crit-card"><div class="crit-emoji">⚡</div><div class="crit-name">Criterion 2<br>Hyperandrogenism</div><div class="crit-badge ${c2cls}">${c2lbl}</div><div class="crit-conf">${r.c2_conf?r.c2_conf+' confidence — ':''} biochemical testing required</div>${sigs(r.c2_sig)}</div>
+        <div class="crit-card"><div class="crit-emoji">🔬</div><div class="crit-name">Criterion 3<br>Polycystic Ovaries (PCOM)</div><div class="crit-badge cb-unk">Requires ultrasound</div><div class="crit-conf">TVS: FNPO ≥20 or ovarian volume ≥10 ml on either ovary</div></div>
+      </div>
+      <div class="phenotype-box"><strong>Phenotype estimate:</strong> ${r.pheno_desc}<br><strong>Metabolic risk level:</strong> ${r.met_risk}</div>
+      <div class="evb-row"><span class="evb evb-t">EBR</span><span class="evb evb-q">⊕⊕⊕○ Moderate quality</span><span class="evb evb-s">*** Conditional recommendation</span></div>
+    </div>
+
+    ${r.clinFlags.length?`<div class="res-sec"><div class="res-sec-title">Clinical Flags — Sorted by Urgency</div>
+      ${p1.length?`<div class="p-divider p1">Priority 1 — Critical</div>${flagHtml(p1,'f1','')}`:''}
+      ${p2.length?`<div class="p-divider p2">Priority 2 — High urgency</div>${flagHtml(p2,'f2','')}`:''}
+      ${p3.length?`<div class="p-divider p3">Priority 3 — Investigate within 1–3 months</div>${flagHtml(p3,'f3','')}`:''}
+      ${p4.length?`<div class="p-divider p4">Priority 4 — Lifestyle recommendations</div>${flagHtml(p4,'f4','')}`:''}
+    </div>`:''}
+
+    <div class="res-sec">
+      <div class="res-sec-title">Recommended Investigations</div>
+      <ul class="inv-list">${r.inv.map(i=>`<li class="inv-item"><span class="inv-dot"></span>${i}</li>`).join('')}</ul>
+      <div style="margin-top:0.75rem;padding:0.75rem 1rem;background:var(--cream);border-radius:0.75rem;font-size:0.72rem;color:var(--ink-muted);line-height:1.6;">
+        <strong style="color:var(--ink);">Not recommended:</strong> Serum AMH as standalone PCOS diagnostic &nbsp;•&nbsp; Direct free testosterone RIA/ELISA (poor accuracy) &nbsp;•&nbsp; Fasting insulin / HOMA-IR for diagnosis alone &nbsp;•&nbsp; Routine ultrasound if both oligo and hyperandrogenism are already confirmed
+      </div>
+    </div>
+
+    <div class="disclaimer">This assessment is a self-report proxy based on the 2018 International Evidence-based Guideline for the Assessment and Management of PCOS (Teede et al.). It is not a clinical diagnosis. A confirmed PCOS diagnosis requires evaluation by a qualified healthcare professional, biochemical androgen testing, and pelvic ultrasound. All results must be interpreted alongside a full clinical history.</div>
+
+    <div class="res-cta">
+      <div class="res-cta-title">Your results are ready to share</div>
+      <div class="res-cta-sub">Join Precare's waitlist to get the full experience — doctor integration, personalised Ayurvedic recommendations, and ongoing monitoring built around your profile.</div>
+      <a href="index.html#waitlist" class="btn-cta">Join the Waitlist</a>
+    </div>
+  `;
+
+  setTimeout(()=>{
+    const circle=document.getElementById('g-circle');
+    if(circle) circle.style.strokeDashoffset=offset.toFixed(1);
+    let count=0;
+    const iv=setInterval(()=>{
+      count+=2;
+      const el=document.getElementById('g-num');
+      if(el) el.textContent=Math.min(count,r.composite);
+      if(count>=r.composite) clearInterval(iv);
+    },28);
+  },350);
+}
+
+init();
+</script>
+</body>
+</html>
